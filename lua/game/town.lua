@@ -14,10 +14,16 @@ setmetatable(Town, {
 })
 
 function Town:_init()
+	self.name = ""
+	self.townSize = 0
+	self.day = 0
 
+	self.citizens = {}
+	self.quests = {}
 end
 
 function Town.new(self)
+	self.name = "My Town"
 	self.townSize = 50
 	self.day = 1
 
@@ -27,11 +33,14 @@ function Town.new(self)
 	self.citizens = {}
 
 	for i=1,self.townSize do
-		self.citizens[i] = Citizen(nameGenerator, faceGenerator)
+		self.citizens[i] = Citizen()
+		self.citizens[i]:generate(nameGenerator, faceGenerator)
 	end
 
 	self.quests = {}
-	table.insert(self.quests, Quest())
+	local quest = Quest()
+	quest:generate()
+	table.insert(self.quests, quest)
 end
 
 function Town.load(self, townSize, day)

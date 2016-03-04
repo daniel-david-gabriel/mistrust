@@ -19,13 +19,14 @@ end
 
 function Game.new(self)
 	self.town = Town()	
-	self.town:new()
-	
+	self.town:new()	
 end
 
 function Game.load(self, save)
-	self.town = Town()
-	self.town:load(save:load())
+	self.town = save:load()
+
+	local altSave = Save("alt.dat")
+	altSave:save(self.town)
 end
 
 function Game.draw(self)
@@ -35,7 +36,7 @@ end
 function Game.keypressed(self, key)
 	if key == keyBindings:getMenu() or key == keyBindings:getTool() then
 		local save = Save("save.dat")
-		save:save()
+		save:save(self.town)
 	end
 end
 

@@ -10,9 +10,29 @@ setmetatable(Check, {
   end,
 })
 
+skills = {
+	["perception"]="perception",
+	["intimidation"]="intimidation",
+	["bluff"]="bluff",
+	["diplomacy"]="diplomacy"
+}
+
+difficulty = {
+	["veryEasy"]=10,
+	["easy"]=20,
+	["average"]=30,
+	["hard"]=40,
+	["veryHard"]=50
+}
+
 function Check:_init()
-	self.skill = "perception"
-	self.difficulty = 100
+	self.skill = ""
+	self.difficulty = 0
+end
+
+function Check.generate(self, skill, difficulty, variance)
+	self.skill = skill
+	self.difficulty = difficulty + love.math.random(variance)
 end
 
 
