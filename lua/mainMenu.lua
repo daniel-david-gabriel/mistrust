@@ -11,7 +11,7 @@ setmetatable(MainMenu, {
 })
 
 function MainMenu:_init()
-        self.cloud = love.graphics.newImage("media/cloud.png")
+        self.cloud = love.graphics.newImage("media/core/cloud.png")
         self.numberOfClouds = 0
         self.maxClouds = 20
         self.cloudPositions = {}
@@ -63,7 +63,6 @@ function MainMenu.draw(self)
 end
 
 function MainMenu.keypressed(self, key)
-print(keyBindings:getUp())
 	if key == keyBindings:getUp() then
 
 		if self.selection > 1 then
@@ -77,6 +76,7 @@ print(keyBindings:getUp())
 		end
 	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
 		if self.submenus[self.selection] == "New Game" then
+			game:new()
 			toState = game
 		elseif self.submenus[self.selection] == "Load Game" then
 			game:load(Save("save.dat"))

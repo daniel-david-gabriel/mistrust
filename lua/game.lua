@@ -1,3 +1,6 @@
+require("lua/game/town")
+require("lua/save")
+
 Game = {}
 Game.__index = Game
 
@@ -11,7 +14,18 @@ setmetatable(Game, {
 })
 
 function Game:_init()
+
+end
+
+function Game.new(self)
+	self.town = Town()	
+	self.town:new()
 	
+end
+
+function Game.load(self, save)
+	self.town = Town()
+	self.town:load(save:load())
 end
 
 function Game.draw(self)
@@ -19,7 +33,10 @@ function Game.draw(self)
 end
 
 function Game.keypressed(self, key)
-	
+	if key == keyBindings:getMenu() or key == keyBindings:getTool() then
+		local save = Save("save.dat")
+		save:save()
+	end
 end
 
 function Game.keyreleased(self, key )
@@ -38,6 +55,3 @@ function Game.loadMaps(self)
 	
 end
 
-function Game.load(self, save)
-	
-end
