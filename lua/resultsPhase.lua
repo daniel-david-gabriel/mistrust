@@ -42,6 +42,10 @@ function ResultsPhase.draw(self)
 	end
 
 	love.graphics.rectangle("fill", selectionX, selectionY, 25, 25)
+
+	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.print("Tainted Killed: " .. game.player.taintedKilled, 60, 60)
+	love.graphics.print("Innocent Killed: " .. game.player.innocentsKilled, 60, 80)
 end
 
 function ResultsPhase.keypressed(self, key)

@@ -1,4 +1,5 @@
 require("lua/game/town")
+require("lua/game/player")
 require("lua/preparationPhase")
 require("lua/actPhase")
 require("lua/resultsPhase")
@@ -25,15 +26,17 @@ end
 function Game.new(self)
 	self.town = Town()	
 	self.town:new()
+
+	self.player = Player()
 end
 
 function Game.load(self, save)
-	self.town = save:load()
+	self.town, self.player = save:load()
 end
 
 function Game.save(self)
 	local save = Save("save.dat")
-	save:save(self.town)
+	save:save(self.town, self.player)
 end
 
 function Game.draw(self)

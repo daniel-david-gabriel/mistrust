@@ -1,3 +1,5 @@
+require("lua/game/actions/killAction")
+
 ActPhase = {}
 ActPhase.__index = ActPhase
 
@@ -14,7 +16,8 @@ function ActPhase:_init()
 
 	self.selections = {
 		["backButton"] = "backButton",
-		["executeButton"] = "executeButton"
+		["executeButton"] = "executeButton",
+		["killAction"] = "killAction"
 	}
 	self.selected = self.selections["executeButton"]
 
@@ -23,7 +26,7 @@ function ActPhase:_init()
 	self.executeButton = love.graphics.newImage("media/menu/executeButton.png")
 
 	self.readyToExecute = false
-
+	self.actionsToExecute = {}
 end
 
 function ActPhase.new(self)
@@ -50,6 +53,10 @@ function ActPhase.draw(self)
 	end
 
 	love.graphics.rectangle("fill", selectionX, selectionY, 25, 25)
+
+	love.graphics.setColor(0, 0, 0, 255)
+	local statusString = self.selections[self.selected] .. " Day: " .. game.town.day
+	love.graphics.print(statusString, 10, 5)
 end
 
 function ActPhase.keypressed(self, key)
@@ -61,11 +68,34 @@ function ActPhase.keypressed(self, key)
 		if self.selected == "backButton" then
 			self.selected = self.selections["executeButton"]
 		end
+	elseif key == keyBindings:getUp() then	
+		if self.selected == "executeButton" or self.selected == "backButton" then
+			self.selected = self.selections["killAction"]
+		end
+	elseif key == keyBindings:getDown() then
+		if self.selected == "killAction" then
+			self.selected = self.selections["backButton"]
+		end
 	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
 		if self.selected == "backButton" then
 			toState = game.preparationPhase
 		elseif self.selected == "executeButton" then
 			self.readyToExecute = true
+		elseif self.selected == "killAction" then
+			if table.getn(self.actionsToExecute) < game.player.actions then
+				if table.getn(game.town.citizens) > 0 then
+					local citizen = nil
+					for k,v in pairs(game.town.citizens) do
+						citizen = k
+						break
+					end
+					table.insert(self.actionsToExecute, KillAction(citizen))
+				else
+					print("No one left in town to kill")
+				end
+			else
+				print("Can't take more actions today")
+			end
 		end
 	end
 end
@@ -85,11 +115,11 @@ function ActPhase.update(self, dt)
 
 		game.town.day = game.town.day + 1
 		--Go through each action selected and perform it
-		
-	end
-end
+		for _,action in pairs(self.actionsToExecute) do
+			action:act()
+		end
 
-function ActPhase.loadMaps(self)
-	
+		self.actionsToExecute = {}
+	end
 end
 

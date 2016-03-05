@@ -16,13 +16,23 @@ function Save:_init(saveFile)
 	self.saveFilename = saveFile
 end
 
-function Save.save(self, town)
+function Save.save(self, town, player)
 	local saveData = ""
 
 	--Save generic town information
 	saveData = saveData .. "TOWNNAME\t" .. town.name .. "\r\n"
 	saveData = saveData .. "TOWNSIZE\t" .. town.townSize .. "\r\n"
 	saveData = saveData .. "TOWNDAY\t" .. town.day .. "\r\n"
+
+	--Save Player stats
+	saveData = saveData .. "PLAYER\r\n"
+	saveData = saveData .. player.name .. "\t" .. player.sex .. "\t" .. player.taint .. "\t" .. player.knows .. "\t"
+	saveData = saveData .. player.face.faceShape .. "\t" .. player.face.eyes .. "\t" .. player.face.nose .. "\t" .. player.face.mouth .. "\t"
+	for k,v in pairs(skills) do
+		saveData = saveData .. player.skills[k] .. "\t"
+	end
+	saveData = saveData .. player.actions .. "\t" .. player.taintedKilled .. "\t" .. player.innocentsKilled
+	saveData = saveData .. "\r\n"
 
 	--Save citizens
 	saveData = saveData .. "CITIZENS\r\n"
@@ -53,11 +63,13 @@ end
 
 function Save.load(self)
 	local town = Town()
+	local player = Player()
 
 	local loadData = love.filesystem.lines(self.saveFilename)
 	local loadCitizens = false
 	local loadQuests = false
 	local loadChecks = false
+	local loadPlayer = false
 
 	local currentQuest = nil
 
@@ -73,10 +85,12 @@ function Save.load(self)
 			loadCitizens = true
 			loadQuests = false
 			loadChecks = false
+			loadPlayer = false
 		elseif lineTokens[1] == "QUEST" then
 			loadCitizens = false
 			loadQuests = true
 			loadChecks = false
+			loadPlayer = false
 		elseif lineTokens[1] == "QUESTEND" then
 			table.insert(town.quests, currentQuest)
 			currentQuest = nil
@@ -84,10 +98,17 @@ function Save.load(self)
 			loadCitizens = false
 			loadQuests = false
 			loadChecks = false
+			loadPlayer = false
 		elseif lineTokens[1] == "CHECKS" then
 			loadCitizens = false
 			loadQuests = false
 			loadChecks = true
+			loadPlayer = false
+		elseif lineTokens[1] == "PLAYER" then
+			loadCitizens = false
+			loadQuests = false
+			loadChecks = false
+			loadPlayer = true
 		else
 			if loadCitizens then
 				local citizen = Citizen()
@@ -116,9 +137,26 @@ function Save.load(self)
 				check.difficulty = tonumber(lineTokens[2])
 
 				table.insert(currentQuest.checksToPass, check)
+			elseif loadPlayer then
+				player.name = lineTokens[1]
+				player.sex = tonumber(lineTokens[2])
+				player.taint = tonumber(lineTokens[3])
+				player.knows = tonumber(lineTokens[4])
+
+				player.face = Face(tonumber(lineTokens[5]), tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]))
+
+				local tokenIndex = 9
+				for k,v in pairs(skills) do
+					player.skills[k] = tonumber(lineTokens[tokenIndex])
+					tokenIndex = tokenIndex + 1
+				end
+
+				player.actions = tonumber(lineTokens[tokenIndex])
+				player.taintedKilled = tonumber(lineTokens[tokenIndex+1])
+				player.innocentsKilled = tonumber(lineTokens[tokenIndex+2])
 			end
 		end
 	end
 
-	return town
+	return town, player
 end
