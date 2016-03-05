@@ -1,4 +1,7 @@
 require("lua/game/town")
+require("lua/preparationPhase")
+require("lua/actPhase")
+require("lua/resultsPhase")
 require("lua/save")
 
 Game = {}
@@ -14,19 +17,23 @@ setmetatable(Game, {
 })
 
 function Game:_init()
-
+	self.preparationPhase = PreparationPhase()
+	self.actPhase = ActPhase()
+	self.resultsPhase = ResultsPhase()
 end
 
 function Game.new(self)
 	self.town = Town()	
-	self.town:new()	
+	self.town:new()
 end
 
 function Game.load(self, save)
 	self.town = save:load()
+end
 
-	local altSave = Save("alt.dat")
-	altSave:save(self.town)
+function Game.save(self)
+	local save = Save("save.dat")
+	save:save(self.town)
 end
 
 function Game.draw(self)
@@ -34,10 +41,7 @@ function Game.draw(self)
 end
 
 function Game.keypressed(self, key)
-	if key == keyBindings:getMenu() or key == keyBindings:getTool() then
-		local save = Save("save.dat")
-		save:save(self.town)
-	end
+
 end
 
 function Game.keyreleased(self, key )
@@ -49,7 +53,7 @@ function Game.mousepressed(self, x, y, button)
 end
 
 function Game.update(self, dt)
-	
+	toState = self.preparationPhase
 end
 
 function Game.loadMaps(self)

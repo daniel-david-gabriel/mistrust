@@ -13,7 +13,7 @@ setmetatable(MainMenu, {
 function MainMenu:_init()
         self.cloud = love.graphics.newImage("media/core/cloud.png")
         self.numberOfClouds = 0
-        self.maxClouds = 20
+        self.maxClouds = 1000
         self.cloudPositions = {}
 	self.cloudTimer = 0
 
@@ -37,6 +37,14 @@ function MainMenu:_init()
 	self.submenuCount = self.submenuCount + 1
 
 	self.submenus[self.submenuCount] = "Quit"
+
+	--prepopulate clouds
+	for i=1,100 do
+		if self.numberOfClouds < self.maxClouds then
+			self.cloudPositions[love.math.random(600) - 40] = love.math.random(800)
+			self.numberOfClouds = self.numberOfClouds + 1
+        	end
+	end
 	
 end
 

@@ -12,7 +12,7 @@ setmetatable(Options, {
 })
 
 function Options:_init()
-	self.displayFPS = true --should default to false?
+	self.displayFPS = false
 	self.sound = false
 	self.debug = true
 end

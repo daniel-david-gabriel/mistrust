@@ -13,6 +13,7 @@ setmetatable(Citizen, {
 function Citizen:_init()
 	self.name = ""
 	self.sex = 0
+	self.occupation = ""
 	self.face = nil
 
 	self.taint = 0
@@ -23,7 +24,7 @@ end
 
 function Citizen.generate(self, nameGenerator, faceGenerator)
 	self.name = nameGenerator:generate(sex)
-	self.sex = love.math.random(1)
+	self.sex = love.math.random(0, 1)
 	self.face = faceGenerator:generate(sex)
 
 	self.taint = 0
