@@ -10,13 +10,15 @@ function love.load()
 	myFont = love.graphics.newImageFont("media/core/font.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?\'\"0123456789-+")
 	love.graphics.setFont(myFont)
 
+	activeState = LoadingScreen()
+	toState = nil
+
+	mainMenu = MainMenu()
+
 	keyBindings = KeyBindings()
 	options = Options()
-	mainMenu = MainMenu()
-	activeState = LoadingScreen()
-	game = Game()
 
-	toState = nil
+	game = Game()
 end
 
 function love.draw()

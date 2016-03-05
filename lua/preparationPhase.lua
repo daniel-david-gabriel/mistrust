@@ -35,9 +35,9 @@ end
 
 function PreparationPhase.draw(self)
 	local y = 40
+	love.graphics.setColor(255, 255, 255, 255)
 	for _,citizen in pairs(game.town.citizens) do
-		love.graphics.setColor(255, 255, 255, 255)
-		local citizenString = citizen.name .. " " .. citizen.sex .. " Taint: " .. citizen.taint
+		local citizenString = citizen.name .. " Suspicious: " .. citizen.suspicious
 		love.graphics.print(citizenString, 60, y - self.offset)
 		y = y + 20
 	end

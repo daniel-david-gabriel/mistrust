@@ -31,13 +31,13 @@ function Save.save(self, town, player)
 	for k,v in pairs(skills) do
 		saveData = saveData .. player.skills[k] .. "\t"
 	end
-	saveData = saveData .. player.actions .. "\t" .. player.taintedKilled .. "\t" .. player.innocentsKilled
+	saveData = saveData .. player.actions .. "\t" .. player.taintedKilled .. "\t" .. player.agentsKilled .. "\t" .. player.innocentsKilled
 	saveData = saveData .. "\r\n"
 
 	--Save citizens
 	saveData = saveData .. "CITIZENS\r\n"
 	for k,citizen in pairs(town.citizens) do
-		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.taint .. "\t" .. citizen.knows .. "\t"
+		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
 		saveData = saveData .. citizen.face.faceShape .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.nose .. "\t" .. citizen.face.mouth .. "\t"
 		for k,v in pairs(skills) do
 			saveData = saveData .. citizen.skills[k] .. "\t"
@@ -116,10 +116,11 @@ function Save.load(self)
 				citizen.sex = tonumber(lineTokens[2])
 				citizen.taint = tonumber(lineTokens[3])
 				citizen.knows = tonumber(lineTokens[4])
+				citizen.suspicious = tonumber(lineTokens[5])
 
-				citizen.face = Face(tonumber(lineTokens[5]), tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]))
+				citizen.face = Face(tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]), tonumber(lineTokens[9]))
 
-				local tokenIndex = 9
+				local tokenIndex = 10
 				for k,v in pairs(skills) do
 					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1
@@ -153,7 +154,8 @@ function Save.load(self)
 
 				player.actions = tonumber(lineTokens[tokenIndex])
 				player.taintedKilled = tonumber(lineTokens[tokenIndex+1])
-				player.innocentsKilled = tonumber(lineTokens[tokenIndex+2])
+				player.agentsKilled = tonumber(lineTokens[tokenIndex+2])
+				player.innocentsKilled = tonumber(lineTokens[tokenIndex+3])
 			end
 		end
 	end

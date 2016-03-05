@@ -1,4 +1,5 @@
 require("lua/game/actions/killAction")
+require("lua/game/actions/canvasAction")
 
 ActPhase = {}
 ActPhase.__index = ActPhase
@@ -17,7 +18,8 @@ function ActPhase:_init()
 	self.selections = {
 		["backButton"] = "backButton",
 		["executeButton"] = "executeButton",
-		["killAction"] = "killAction"
+		["killAction"] = "killAction",
+		["canvasAction"] = "canvasAction"
 	}
 	self.selected = self.selections["executeButton"]
 
@@ -67,13 +69,15 @@ function ActPhase.keypressed(self, key)
 	elseif key == keyBindings:getRight() then	
 		if self.selected == "backButton" then
 			self.selected = self.selections["executeButton"]
+		elseif self.selected == "killAction" then
+			self.selected = self.selections["canvasAction"]
 		end
 	elseif key == keyBindings:getUp() then	
 		if self.selected == "executeButton" or self.selected == "backButton" then
 			self.selected = self.selections["killAction"]
 		end
 	elseif key == keyBindings:getDown() then
-		if self.selected == "killAction" then
+		if self.selected == "killAction" or self.selected == "canvasAction" then
 			self.selected = self.selections["backButton"]
 		end
 	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
@@ -96,6 +100,8 @@ function ActPhase.keypressed(self, key)
 			else
 				print("Can't take more actions today")
 			end
+		elseif self.selected == "canvasAction" then
+			table.insert(self.actionsToExecute, CanvasAction())
 		end
 	end
 end

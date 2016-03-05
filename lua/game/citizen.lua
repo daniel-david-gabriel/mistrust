@@ -19,6 +19,8 @@ function Citizen:_init()
 	self.taint = 0
 	self.knows = 0
 
+	self.suspicious = 0
+
 	self.skills = {}
 end
 
@@ -27,8 +29,8 @@ function Citizen.generate(self, nameGenerator, faceGenerator)
 	self.sex = love.math.random(0, 1)
 	self.face = faceGenerator:generate(sex)
 
-	self.taint = 0
-	self.knows = 0
+	self.taint = love.math.random(0, 1)
+	self.knows = love.math.random(0, 1)
 
 	for k,v in pairs(skills) do
 		self.skills[k] = love.math.random(100)

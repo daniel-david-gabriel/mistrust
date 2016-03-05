@@ -30,5 +30,8 @@ function Player:_init()
 	self.actions = 3
 	
 	self.taintedKilled = 0
+	self.agentsKilled = 0
 	self.innocentsKilled = 0
+
+	self.prayersKnown = {}
 end
