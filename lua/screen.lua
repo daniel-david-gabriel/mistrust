@@ -54,11 +54,62 @@ function Screen.drawPhaseBackground(self)
 	love.graphics.draw(lowerRight, love.graphics.getWidth() - (lowerRight:getWidth()*2), love.graphics.getHeight() - (lowerRight:getHeight()*2), 0, 2, 2)
 end
 
+function Screen.drawPortrait(self, x, y, citizen)
+	local width = 128
+	local height = 128
+
+	local background = images:getImage("background")
+	love.graphics.setColor(background["red"], background["green"], background["blue"], 255)
+	love.graphics.rectangle("fill", x, y, width, height)
+
+	love.graphics.setColor(255, 255, 255, 255)
+
+	local faces = images:getImage("faces")
+	local face = nil
+	if citizen.sex == 0 then
+		face = faces["females"]
+	else
+		face = faces["males"]
+	end
+
+	love.graphics.draw(face["heads"][citizen.face.head], x, y, 0, 2, 2)
+	love.graphics.draw(face["eyes"][citizen.face.eyes], x, y, 0, 2, 2)
+	love.graphics.draw(face["hairs"][citizen.face.hair], x, y, 0, 2, 2)
+	love.graphics.draw(face["mouths"][citizen.face.mouth], x, y, 0, 2, 2)
+	love.graphics.draw(face["accessories"][citizen.face.accessories], x, y, 0, 2, 2)
+
+	local upperLeft = background["tiles"]["upperLeft"]
+	local upper = background["tiles"]["upper"]
+	local upperRight = background["tiles"]["upperRight"]
+
+	local left = background["tiles"]["left"]
+	local right =  background["tiles"]["right"]
+
+	local lowerLeft = background["tiles"]["lowerLeft"]
+	local lower =  background["tiles"]["lower"]
+	local lowerRight = background["tiles"]["lowerRight"]
+
+	love.graphics.draw(upper, x, y, 0, width / upper:getWidth(), 2)
+	love.graphics.draw(lower, x, y + height - (lower:getHeight()*2), 0, width / upper:getWidth(), 2)
+
+	love.graphics.draw(left, x, y, 0, 2, height / left:getHeight())
+	love.graphics.draw(right, x + width - (right:getWidth()*2), y, 0, 2, height / right:getHeight())
+	
+	love.graphics.draw(upperLeft, x, y, 0, 2, 2)
+	love.graphics.draw(upperRight, x + width - (upperRight:getWidth()*2), y, 0, 2, 2)
+	love.graphics.draw(lowerLeft, x, y + height - (lowerLeft:getHeight()*2), 0, 2, 2)
+	love.graphics.draw(lowerRight, x + width - (lowerRight:getWidth()*2), y + height - (lowerRight:getHeight()*2), 0, 2, 2)
+end
+
 function Screen.drawCursor(self, x, y)
 	love.graphics.setColor(255, 255, 255, 255)
 
 	local cursor = images:getImage("cursor")
 
 	love.graphics.draw(cursor, x, y, 0, 0.5, 0.5)
+end
+
+function Screen.drawButton(self, x, y, text)
+
 end
 

@@ -12,33 +12,24 @@ setmetatable(MainMenu, {
 
 function MainMenu:_init()
 	self.background = love.graphics.newImage("media/menu/darkBackground.png")
+	self.title = love.graphics.newImage("media/menu/title.png")
 
         self.cloud = love.graphics.newImage("media/core/cloud.png")
         self.numberOfClouds = 0
         self.maxClouds = 1000
+	self.cloudAlpha = 0
         self.cloudPositions = {}
 	self.cloudTimer = 0
 
-	self.submenus = {}
-	self.submenuCount = 1
-
+	self.submenuCount = 5
 	self.selection = 1
-	self.submenus[self.submenuCount] = "New Game"
-	self.submenuCount = self.submenuCount + 1
-
-	if love.filesystem.exists("save.dat") then
-		self.selection = 2
-		self.submenus[self.submenuCount] = "Load Game"
-		self.submenuCount = self.submenuCount + 1
-	end
-
-	self.submenus[self.submenuCount] = "Controls"
-	self.submenuCount = self.submenuCount + 1
-
-	self.submenus[self.submenuCount] = "Options"
-	self.submenuCount = self.submenuCount + 1
-
-	self.submenus[self.submenuCount] = "Quit"
+	
+	self.menuText = ""
+	self.menuText = self.menuText .. "New Game\n"
+	self.menuText = self.menuText .. "Load Game\n"
+	self.menuText = self.menuText .. "Options\n"
+	self.menuText = self.menuText .. "Credits\n"
+	self.menuText = self.menuText .. "Quit"
 
 	--prepopulate clouds
 	for i=1,100 do
@@ -64,7 +55,7 @@ function MainMenu.draw(self)
 	love.graphics.draw(self.background, 0, 0, 0, width / imageWidth, height / imageHeight)
 	
 	for k,v in pairs(self.cloudPositions) do
-		love.graphics.setColor(255, 255, 255, 16)
+		love.graphics.setColor(255, 255, 255, self.cloudAlpha)
 		love.graphics.draw(self.cloud, v, k)
                 self.cloudPositions[k] = v - 1
                 if self.cloudPositions[k] <= -100 then
@@ -74,11 +65,12 @@ function MainMenu.draw(self)
 	end
 
 	love.graphics.setColor(255, 255, 255, 255)
-	for k,v in pairs(self.submenus) do
-		love.graphics.print(v, 600, 50 + k*50)
-	end
+	love.graphics.printf(self.menuText, love.graphics.getWidth()/4, love.graphics.getHeight()/2, love.graphics.getWidth()/2, "center")
 
-	love.graphics.rectangle("fill", 575, 50 + 50 *self.selection, 25, 25)
+	love.graphics.draw(self.title, 0, 0)
+
+	--love.graphics.rectangle("fill", 575, 50 + 50 *self.selection, 25, 25)
+	screen:drawCursor(295, 270 + 32*self.selection)
 end
 
 function MainMenu.keypressed(self, key)
@@ -94,17 +86,17 @@ function MainMenu.keypressed(self, key)
 			--soundEffects:playSoundEffect(self.sfx)
 		end
 	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
-		if self.submenus[self.selection] == "New Game" then
+		if self.selection == 1 then
 			game:new()
 			toState = game
-		elseif self.submenus[self.selection] == "Load Game" then
+		elseif self.selection == 2 then
 			game:load(Save("save.dat"))
 			toState = game
-		elseif self.submenus[self.selection] == "Controls" then
-			toState = Controls()
-		elseif self.submenus[self.selection] == "Options" then
-			toState = OptionsMenu()
-		elseif self.submenus[self.selection] == "Quit" then
+		elseif self.selection == 3 then
+			--options
+		elseif self.selection == 4 then
+			--credits
+		elseif self.selection == 5 then
 			love.event.push("quit")
 		end
 	else
@@ -131,5 +123,9 @@ function MainMenu.update(self, dt)
         	end
 	else
 		self.cloudTimer = self.cloudTimer - (dt * 1000)
+	end
+
+	if self.cloudAlpha < 16 then
+		self.cloudAlpha = self.cloudAlpha + 1
 	end
 end

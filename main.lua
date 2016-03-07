@@ -9,7 +9,7 @@ require("lua/game/faceGenerator")
 
 function love.load()
 	--myFont = love.graphics.newImageFont("media/core/font.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?\'\"0123456789-+")
-	myFont = love.graphics.newFont("media/core/alagard.ttf", 18)
+	myFont = love.graphics.newFont("media/core/alagard.ttf", 30)
 	love.graphics.setFont(myFont)
 
 	activeState = LoadingScreen()

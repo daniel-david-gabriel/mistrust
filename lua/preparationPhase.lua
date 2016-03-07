@@ -11,7 +11,7 @@ setmetatable(PreparationPhase, {
 })
 
 function PreparationPhase:_init()
-	self.offset = 0
+	self.citizenIndex = 1
 
 	self.selections = {
 		["town"] = "town",
@@ -37,27 +37,18 @@ function PreparationPhase.draw(self)
 
 	screen:drawPhaseBackground()
 
-	local y = 40
 	love.graphics.setColor(255, 255, 255, 255)
-	for _,citizen in pairs(game.town.citizens) do
-		local citizenString = citizen.name .. " Suspicious: " .. citizen.suspicious
-		love.graphics.print(citizenString, 60, y - self.offset)
-		y = y + 20
-	end
-
-	--love.graphics.draw(self.maskImage, 0, 0)
 
 	love.graphics.draw(self.menuButton, 25, 560)
 	love.graphics.draw(self.saveButton, 360, 560)
 	love.graphics.draw(self.beginButton, 695, 560)
 
-	love.graphics.setColor(0, 0, 0, 255)
-	local statusString = self.selections[self.selected] .. " Day: " .. game.town.day
-	love.graphics.print(statusString, 10, 5)
+	--love.graphics.setColor(0, 0, 0, 255)
+	--local statusString = self.selections[self.selected] .. " Day: " .. game.town.day
+	--love.graphics.print(statusString, 10, 5)
 
 	local selectionX = 0
 	local selectionY = 0
-	love.graphics.setColor(0, 0, 0, 255)
 
 	if self.selected == "beginButton" then
 		selectionX = 685
@@ -70,15 +61,23 @@ function PreparationPhase.draw(self)
 		selectionY = 560
 	end
 
-	--love.graphics.rectangle("fill", selectionX, selectionY, 25, 25)
 	screen:drawCursor(selectionX, selectionY)
+
+	screen:drawPortrait(50, 50, game.town.citizens[self.citizenIndex])
 end
 
 function PreparationPhase.keypressed(self, key)
 	if key == keyBindings:getUp() then
-		self.offset = self.offset - 20
+		self.citizenIndex = self.citizenIndex - 1
+		if self.citizenIndex < 1 then
+			self.citizenIndex = 1
+
+		end
 	elseif key == keyBindings:getDown() then
-		self.offset = self.offset + 20
+		self.citizenIndex = self.citizenIndex + 1
+		if self.citizenIndex > table.getn(game.town.citizens) then
+			self.citizenIndex = table.getn(game.town.citizens)
+		end
 	elseif key == keyBindings:getLeft() then
 		if self.selected == "beginButton" then
 			self.selected = self.selections["saveButton"]

@@ -10,9 +10,10 @@ setmetatable(Face, {
   end,
 })
 
-function Face:_init(faceShape, eyes, nose, mouth)
-	self.faceShape = faceShape
+function Face:_init(head, eyes, mouth, hair, accessories)
+	self.head = head
 	self.eyes = eyes
-	self.nose = nose
 	self.mouth = mouth
+	self.hair = hair
+	self.accessories = accessories
 end

@@ -17,5 +17,19 @@ function FaceGenerator:_init()
 end
 
 function FaceGenerator.generate(self, sex)
-	return Face(1, 2, 3, 4)
+	
+	local faceTable = {}
+	if sex == 0 then
+		faceTable = images:getImage("faces")["females"]
+	else
+		faceTable = images:getImage("faces")["males"]
+	end
+
+	local head = love.math.random(1,table.getn(faceTable["heads"]))
+	local eyes = love.math.random(1,table.getn(faceTable["eyes"]))
+	local mouth = love.math.random(1,table.getn(faceTable["mouths"]))
+	local hair = love.math.random(1,table.getn(faceTable["hairs"]))
+	local accessories = love.math.random(1,table.getn(faceTable["accessories"]))
+
+	return Face(head, eyes, mouth, hair, accessories)
 end

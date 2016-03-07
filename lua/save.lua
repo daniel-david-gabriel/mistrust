@@ -27,7 +27,7 @@ function Save.save(self, town, player)
 	--Save Player stats
 	saveData = saveData .. "PLAYER\r\n"
 	saveData = saveData .. player.name .. "\t" .. player.sex .. "\t" .. player.taint .. "\t" .. player.knows .. "\t"
-	saveData = saveData .. player.face.faceShape .. "\t" .. player.face.eyes .. "\t" .. player.face.nose .. "\t" .. player.face.mouth .. "\t"
+	saveData = saveData .. player.face.head .. "\t" .. player.face.eyes .. "\t" .. player.face.mouth .. "\t" .. player.face.hair .. "\t" .. player.face.accessories .. "\t"
 	for k,v in pairs(skills) do
 		saveData = saveData .. player.skills[k] .. "\t"
 	end
@@ -38,7 +38,8 @@ function Save.save(self, town, player)
 	saveData = saveData .. "CITIZENS\r\n"
 	for k,citizen in pairs(town.citizens) do
 		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
-		saveData = saveData .. citizen.face.faceShape .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.nose .. "\t" .. citizen.face.mouth .. "\t"
+		saveData = saveData .. citizen.face.head .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.mouth .. "\t" .. citizen.face.hair .. "\t" .. citizen.face.accessories .. "\t"
+
 		for k,v in pairs(skills) do
 			saveData = saveData .. citizen.skills[k] .. "\t"
 		end
@@ -118,9 +119,9 @@ function Save.load(self)
 				citizen.knows = tonumber(lineTokens[4])
 				citizen.suspicious = tonumber(lineTokens[5])
 
-				citizen.face = Face(tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]), tonumber(lineTokens[9]))
+				citizen.face = Face(tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]), tonumber(lineTokens[9]), tonumber(lineTokens[10]))
 
-				local tokenIndex = 10
+				local tokenIndex = 11
 				for k,v in pairs(skills) do
 					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1
@@ -144,9 +145,9 @@ function Save.load(self)
 				player.taint = tonumber(lineTokens[3])
 				player.knows = tonumber(lineTokens[4])
 
-				player.face = Face(tonumber(lineTokens[5]), tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]))
+				player.face = Face(tonumber(lineTokens[5]), tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]), tonumber(lineTokens[9]))
 
-				local tokenIndex = 9
+				local tokenIndex = 10
 				for k,v in pairs(skills) do
 					player.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1

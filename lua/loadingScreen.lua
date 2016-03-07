@@ -14,12 +14,18 @@ setmetatable(LoadingScreen, {
 })
 
 function LoadingScreen:_init()
+	self.loading = true
 	self.loadingText = "Loading Images..."
+	self.background = love.graphics.newImage("media/menu/darkBackground.png")
+	self.backgroundAlpha = 128
 end
 
 function LoadingScreen.draw(self)
+	love.graphics.setColor(255, 255, 255, self.backgroundAlpha)
+	love.graphics.draw(self.background, 0, 0)
+
 	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.print(self.loadingText, 10, 30)
+	love.graphics.printf(self.loadingText, 0, love.graphics.getHeight()/2 - 20, love.graphics.getWidth(), "center")
 end
 
 function LoadingScreen.keypressed(self, key)
@@ -40,32 +46,21 @@ function LoadingScreen.update(self, dt)
 		self.loadingText = "Loading Music..."
 	elseif not music then
 		music = Music()
+		self.loadingText = "Done!"
+		self.loading = false
 	end
 
-
-	--[[if not images then
-		images = Images()
-		self.loadingText = "Loading Tiles..."
-	elseif not tiles then
-		tiles = Tiles()
-		self.loadingText = "Loading Portraits..."
-	elseif not portraits then
-		portraits = Portraits()
-		self.loadingText = "Loading Music..."
-	elseif not music then
-		music = Music()
-		self.loadingText = "Loading Sound Effects..."
-	elseif not soundEffects then
-		soundEffects = SoundEffects()
-	end
-	
-	if images and tiles and portraits and music and soundEffects then
-		game = Game()
-		toState = mainMenu
-	end]]--
-
-	if images and music then
-	        toState = mainMenu
+	if not self.loading then
+		if self.backgroundAlpha < 255 then
+			self.backgroundAlpha = self.backgroundAlpha + 4
+			if self.backgroundAlpha > 255 then
+				self.backgroundAlpha = 255
+			end
+		else
+			if images and music then
+				toState = mainMenu
+			end
+		end
 	end
 end
 
