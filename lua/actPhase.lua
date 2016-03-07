@@ -36,8 +36,7 @@ function ActPhase.new(self)
 end
 
 function ActPhase.draw(self)
-	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.draw(self.maskImage, 0, 0)
+	screen:drawPhaseBackground()
 
 	love.graphics.draw(self.backButton, 25, 560)
 	love.graphics.draw(self.executeButton, 695, 560)

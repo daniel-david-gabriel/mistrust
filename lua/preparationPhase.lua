@@ -34,6 +34,9 @@ function PreparationPhase.new(self)
 end
 
 function PreparationPhase.draw(self)
+
+	screen:drawPhaseBackground()
+
 	local y = 40
 	love.graphics.setColor(255, 255, 255, 255)
 	for _,citizen in pairs(game.town.citizens) do
@@ -42,7 +45,7 @@ function PreparationPhase.draw(self)
 		y = y + 20
 	end
 
-	love.graphics.draw(self.maskImage, 0, 0)
+	--love.graphics.draw(self.maskImage, 0, 0)
 
 	love.graphics.draw(self.menuButton, 25, 560)
 	love.graphics.draw(self.saveButton, 360, 560)
@@ -67,7 +70,8 @@ function PreparationPhase.draw(self)
 		selectionY = 560
 	end
 
-	love.graphics.rectangle("fill", selectionX, selectionY, 25, 25)
+	--love.graphics.rectangle("fill", selectionX, selectionY, 25, 25)
+	screen:drawCursor(selectionX, selectionY)
 end
 
 function PreparationPhase.keypressed(self, key)

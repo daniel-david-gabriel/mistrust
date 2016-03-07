@@ -1,4 +1,5 @@
 require("lua/keyBindings")
+require("lua/screen")
 require("lua/mainMenu")
 require("lua/loadingScreen")
 require("lua/game")
@@ -7,11 +8,14 @@ require("lua/game/nameGenerator")
 require("lua/game/faceGenerator")
 
 function love.load()
-	myFont = love.graphics.newImageFont("media/core/font.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?\'\"0123456789-+")
+	--myFont = love.graphics.newImageFont("media/core/font.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?\'\"0123456789-+")
+	myFont = love.graphics.newFont("media/core/alagard.ttf", 18)
 	love.graphics.setFont(myFont)
 
 	activeState = LoadingScreen()
 	toState = nil
+
+	screen = Screen()
 
 	mainMenu = MainMenu()
 

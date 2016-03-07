@@ -1,3 +1,6 @@
+require("lua/music")
+require("lua/images")
+
 LoadingScreen = {}
 LoadingScreen.__index = LoadingScreen
 
@@ -32,6 +35,14 @@ function LoadingScreen.mousepressed(self, x, y, button)
 end
 
 function LoadingScreen.update(self, dt)
+	if not images then
+		images = Images()
+		self.loadingText = "Loading Music..."
+	elseif not music then
+		music = Music()
+	end
+
+
 	--[[if not images then
 		images = Images()
 		self.loadingText = "Loading Tiles..."
@@ -53,5 +64,8 @@ function LoadingScreen.update(self, dt)
 		toState = mainMenu
 	end]]--
 
-        toState = mainMenu
+	if images and music then
+	        toState = mainMenu
+	end
 end
+

@@ -29,8 +29,7 @@ function ResultsPhase.new(self)
 end
 
 function ResultsPhase.draw(self)
-	love.graphics.setColor(255, 255, 255, 255)
-	love.graphics.draw(self.maskImage, 0, 0)
+	screen:drawPhaseBackground()
 
 	love.graphics.draw(self.okButton, 695, 560)
 

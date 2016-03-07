@@ -11,6 +11,8 @@ setmetatable(MainMenu, {
 })
 
 function MainMenu:_init()
+	self.background = love.graphics.newImage("media/menu/darkBackground.png")
+
         self.cloud = love.graphics.newImage("media/core/cloud.png")
         self.numberOfClouds = 0
         self.maxClouds = 1000
@@ -49,11 +51,20 @@ function MainMenu:_init()
 end
 
 function MainMenu.draw(self)
-	love.graphics.setColor(51, 153, 102, 255)
-	love.graphics.rectangle("fill", 0, 0, 800, 600)
+	--love.graphics.setColor(51, 153, 102, 255)
+	--love.graphics.rectangle("fill", 0, 0, 800, 600)
+
+	--determine scaling for background image
+	local width = love.graphics.getWidth()
+	local height = love.graphics.getHeight()
+	local imageWidth = self.background:getWidth()
+	local imageHeight = self.background:getHeight()
+
+	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.draw(self.background, 0, 0, 0, width / imageWidth, height / imageHeight)
 	
 	for k,v in pairs(self.cloudPositions) do
-		love.graphics.setColor(255, 255, 255, 128)
+		love.graphics.setColor(255, 255, 255, 16)
 		love.graphics.draw(self.cloud, v, k)
                 self.cloudPositions[k] = v - 1
                 if self.cloudPositions[k] <= -100 then
@@ -62,7 +73,7 @@ function MainMenu.draw(self)
                 end
 	end
 
-	love.graphics.setColor(0, 0, 0, 255)
+	love.graphics.setColor(255, 255, 255, 255)
 	for k,v in pairs(self.submenus) do
 		love.graphics.print(v, 600, 50 + k*50)
 	end
@@ -110,6 +121,8 @@ function MainMenu.mousepressed(self, x, y, button)
 end
 
 function MainMenu.update(self, dt)
+	music:playMusic("prelude")
+
 	if self.cloudTimer <= 0 then
 		if self.numberOfClouds < self.maxClouds then
 			self.cloudPositions[love.math.random(600) - 40] = 800
