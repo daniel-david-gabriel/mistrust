@@ -35,19 +35,17 @@ function love.draw()
 end
 
 function love.keypressed(key)
-	if controls:isQuit(input) then
+	if controls:isQuit(key) then
 		love.event.push("quit")
 		return
 	end
-	--activeState:keypressed(key)
 	activeState:processControls(key)
 end
 
 function love.gamepadpressed( joystick, button )
-	if options.debug then
+	--if options.debug then
 		print(button)
-	end
-	--activeState:gamepadpressed(button)
+	--end
 	activeState:processControls(button)
 end
 

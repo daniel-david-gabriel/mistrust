@@ -1,4 +1,5 @@
 require("lua/menu/videoOptions")
+require("lua/menu/soundOptions")
 
 Options = {}
 Options.__index = Options
@@ -15,11 +16,13 @@ setmetatable(Options, {
 
 function Options:_init()
 	self.background = love.graphics.newImage("media/menu/darkBackground.png")
+	self.sfx = "menu"
 
 	self.videoOptions = VideoOptions()
+	self.soundOptions = SoundOptions()
 
 	self.displayFPS = false
-	self.sound = false
+	self.sound = true
 	self.debug = false
 
 	self.submenuCount = 5
@@ -54,21 +57,18 @@ function Options.processControls(self, input)
 
 		if self.selection > 1 then
 			self.selection = self.selection - 1
-			--soundEffects:playSoundEffect(self.sfx)
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	elseif controls:isDown(input) then
 		if self.selection < self.submenuCount then
 			self.selection = self.selection + 1
-			--soundEffects:playSoundEffect(self.sfx)
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
 			toState = self.videoOptions
 		elseif self.selection == 2 then
-			--[[self.sound = not self.sound
-			if not self.sound then
-				music:stopAllSounds()
-			end]]--
+			toState = self.soundOptions
 		elseif self.selection == 3 then
 
 		elseif self.selection == 4 then

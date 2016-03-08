@@ -13,8 +13,9 @@ setmetatable(MainMenu, {
 function MainMenu:_init()
 	self.background = love.graphics.newImage("media/menu/darkBackground.png")
 	self.title = love.graphics.newImage("media/menu/title.png")
-
         self.cloud = love.graphics.newImage("media/core/cloud.png")
+	self.sfx = "menu"
+
         self.numberOfClouds = 0
         self.maxClouds = 1000
 	self.cloudAlpha = 0
@@ -86,26 +87,18 @@ function MainMenu.update(self, dt)
 		self.cloudAlpha = self.cloudAlpha + 1
 	end
 end
---[[
-function MainMenu.keypressed(self, key)
-	self:processControlls(key)
-end
 
-function MainMenu.gamepadpressed(self, button)
-	self:processControlls(key)
-end
-]]--
 function MainMenu.processControls(self, input)
 	if controls:isUp(input) then
 
 		if self.selection > 1 then
 			self.selection = self.selection - 1
-			--soundEffects:playSoundEffect(self.sfx)
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	elseif controls:isDown(input) then
 		if self.selection < self.submenuCount then
 			self.selection = self.selection + 1
-			--soundEffects:playSoundEffect(self.sfx)
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then

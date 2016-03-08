@@ -198,7 +198,7 @@ function PreparationPhase.mousepressed(self, x, y, button)
 end
 
 function PreparationPhase.update(self, dt)
-	
+	music:playMusic("main")
 end
 
 function PreparationPhase.drawTownTab(self, alpha)

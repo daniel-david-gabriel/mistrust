@@ -16,14 +16,14 @@ function GamepadBindings:_init()
 	self.bindings = {}
 
 	--Prepopulate bindings with defaults in case of incomplete bindings file
-	self.bindings["quit"] = "escape"
-	self.bindings["up"] = "w"
-	self.bindings["down"] = "s"
-	self.bindings["left"] = "a"
-	self.bindings["right"] = "d"
-	self.bindings["menu"] = "return"
-	self.bindings["confirm"] = "space"
-	self.bindings["back"] = "lshift"
+	self.bindings["quit"] = ""
+	self.bindings["up"] = "dpup"
+	self.bindings["down"] = "dpdown"
+	self.bindings["left"] = "dpleft"
+	self.bindings["right"] = "dpright"
+	self.bindings["menu"] = "start"
+	self.bindings["confirm"] = "a"
+	self.bindings["back"] = "b"
 
 	if love.filesystem.exists(self.bindingsFilename) then
 		self:loadBindings()

@@ -19,34 +19,66 @@ function Controls:_init()
 end
 
 function Controls.isQuit(self, input)
-	return input == self.keyBindings:getQuit() or input == self.gamepadBindings:getQuit()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getQuit()
+	else
+		return input == self.gamepadBindings:getQuit()
+	end
 end
 
 function Controls.isUp(self, input)
-	return input == self.keyBindings:getUp() or input == self.gamepadBindings:getUp()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getUp()
+	else
+		return input == self.gamepadBindings:getUp()
+	end
 end
 
 function Controls.isDown(self, input)
-	return input == self.keyBindings:getDown() or input == self.gamepadBindings:getDown()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getDown()
+	else
+		return input == self.gamepadBindings:getDown()
+	end
 end
 
 function Controls.isLeft(self, input)
-	return input == self.keyBindings:getLeft() or input == self.gamepadBindings:getLeft()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getLeft()
+	else
+		return input == self.gamepadBindings:getLeft()
+	end
 end
 
 function Controls.isRight(self, input)
-	return input == self.keyBindings:getRight() or input == self.gamepadBindings:getRight()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getRight()
+	else
+		return input == self.gamepadBindings:getRight()
+	end
 end
 
 function Controls.isMenu(self, input)
-	return input == self.keyBindings:getMenu() or input == self.gamepadBindings:getMenu()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getMenu()
+	else
+		return input == self.gamepadBindings:getMenu()
+	end
 end
 
 function Controls.isBack(self, input)
-	return input == self.keyBindings:getBack() or input == self.gamepadBindings:getBack()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getBack()
+	else
+		return input == self.gamepadBindings:getBack()
+	end
 end
 
 function Controls.isConfirm(self, input)
-	return input == self.keyBindings:getConfirm() or input == self.gamepadBindings:getConfirm()
+	if love.keyboard.isDown(input) then
+		return input == self.keyBindings:getConfirm()
+	else
+		return input == self.gamepadBindings:getConfirm()
+	end
 end
 

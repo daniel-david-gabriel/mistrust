@@ -19,7 +19,6 @@ Buch: http://opengameart.org/users/buch
 http://opengameart.org/content/pointers-part-5
 License: CC0
 
-
 http://opengameart.org/content/game-over-theme
 License: CC-BY 3.0
 Composed by: Cleyton R. Xavier - http://opengameart.org/users/doppelganger

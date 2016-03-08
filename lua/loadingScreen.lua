@@ -1,4 +1,5 @@
 require("lua/music")
+require("lua/soundeffects")
 require("lua/images")
 
 LoadingScreen = {}
@@ -46,6 +47,9 @@ function LoadingScreen.update(self, dt)
 		self.loadingText = "Loading Music..."
 	elseif not music then
 		music = Music()
+		self.loadingText = "Loading Sound Effects..."
+	elseif not soundEffects then
+		soundEffects = SoundEffects()
 		self.loadingText = "Done!"
 		self.loading = false
 	end
@@ -57,7 +61,7 @@ function LoadingScreen.update(self, dt)
 				self.backgroundAlpha = 255
 			end
 		else
-			if images and music then
+			if images and music and soundEffects then
 				toState = mainMenu
 			end
 		end
