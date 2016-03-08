@@ -72,19 +72,19 @@ function VideoOptions.draw(self)
 	screen:drawCursor(295, 270 + 32*self.selection)
 end
 
-function VideoOptions.keypressed(self, key)
-	if key == keyBindings:getUp() then
+function VideoOptions.processControls(self, input)
+	if controls:isUp(input) then
 
 		if self.selection > 1 then
 			self.selection = self.selection - 1
 			--soundEffects:playSoundEffect(self.sfx)
 		end
-	elseif key == keyBindings:getDown() then
+	elseif controls:isDown(input) then
 		if self.selection < self.submenuCount then
 			self.selection = self.selection + 1
 			--soundEffects:playSoundEffect(self.sfx)
 		end
-	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
+	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
 			--window size
 		elseif self.selection == 2 then

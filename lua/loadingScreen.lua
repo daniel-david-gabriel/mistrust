@@ -28,7 +28,7 @@ function LoadingScreen.draw(self)
 	love.graphics.printf(self.loadingText, 0, love.graphics.getHeight()/2 - 20, love.graphics.getWidth(), "center")
 end
 
-function LoadingScreen.keypressed(self, key)
+function LoadingScreen.processControls(self, input)
 	--
 end
 

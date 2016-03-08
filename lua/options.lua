@@ -34,9 +34,6 @@ function Options:_init()
 end
 
 function Options.draw(self)
-	--love.graphics.setColor(51, 153, 102, 255)
-	--love.graphics.rectangle("fill", 0, 0, 800, 600)
-
 	--determine scaling for background image
 	local width = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
@@ -52,19 +49,19 @@ function Options.draw(self)
 	screen:drawCursor(295, 270 + 32*self.selection)
 end
 
-function Options.keypressed(self, key)
-	if key == keyBindings:getUp() then
+function Options.processControls(self, input)
+	if controls:isUp(input) then
 
 		if self.selection > 1 then
 			self.selection = self.selection - 1
 			--soundEffects:playSoundEffect(self.sfx)
 		end
-	elseif key == keyBindings:getDown() then
+	elseif controls:isDown(input) then
 		if self.selection < self.submenuCount then
 			self.selection = self.selection + 1
 			--soundEffects:playSoundEffect(self.sfx)
 		end
-	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
+	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
 			toState = self.videoOptions
 		elseif self.selection == 2 then

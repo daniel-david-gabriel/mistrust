@@ -38,12 +38,28 @@ end
 function ActPhase.draw(self)
 	screen:drawPhaseBackground()
 
-	love.graphics.draw(self.backButton, 25, 560)
-	love.graphics.draw(self.executeButton, 695, 560)
+	if self.selected == "backButton" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 25, 560, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 25, 560, 0, 2, 2)
+	end
+	love.graphics.print("Back", 35, 560)
+
+	if self.selected == "executeButton" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 695, 560, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 695, 560, 0, 2, 2)
+	end
+	love.graphics.print("Execute", 705, 560)
+
+	local actionTemplate = love.graphics.newImage("media/menu/actionTemplate.png")
+	love.graphics.draw(actionTemplate, 20, 20, 0, 2, 2)
+	love.graphics.draw(actionTemplate, 20, 20 + actionTemplate:getHeight()*2, 0, 2, 2)
+	love.graphics.print("Canvas", 30, 30)
+	love.graphics.print("Kill", 30, 30 + actionTemplate:getHeight()*2)
 
 	local selectionX = 0
 	local selectionY = 0
-	love.graphics.setColor(0, 0, 0, 255)
 
 	if self.selected == "executeButton" then
 		selectionX = 685
@@ -51,35 +67,39 @@ function ActPhase.draw(self)
 	elseif self.selected == "backButton" then
 		selectionX = 5
 		selectionY = 560
+	elseif self.selected == "canvasAction" then
+		selectionX = 25
+		selectionY = 25
+	elseif self.selected == "killAction" then
+		selectionX = 25
+		selectionY = 25 + actionTemplate:getHeight()*2
 	end
 
-	love.graphics.rectangle("fill", selectionX, selectionY, 25, 25)
-
-	love.graphics.setColor(0, 0, 0, 255)
-	local statusString = self.selections[self.selected] .. " Day: " .. game.town.day
-	love.graphics.print(statusString, 10, 5)
+	screen:drawCursor(selectionX, selectionY)
 end
 
-function ActPhase.keypressed(self, key)
-	if key == keyBindings:getLeft() then
+function ActPhase.processControls(self, input)
+	if controls:isLeft(input) then
 		if self.selected == "executeButton" then
 			self.selected = self.selections["backButton"]
 		end
-	elseif key == keyBindings:getRight() then	
+	elseif controls:isRight(input) then	
 		if self.selected == "backButton" then
 			self.selected = self.selections["executeButton"]
+		end
+	elseif controls:isUp(input) then	
+		if self.selected == "executeButton" or self.selected == "backButton" then
+			self.selected = self.selections["killAction"]
 		elseif self.selected == "killAction" then
 			self.selected = self.selections["canvasAction"]
 		end
-	elseif key == keyBindings:getUp() then	
-		if self.selected == "executeButton" or self.selected == "backButton" then
+	elseif controls:isDown(input) then
+		if self.selected == "canvasAction" then
 			self.selected = self.selections["killAction"]
-		end
-	elseif key == keyBindings:getDown() then
-		if self.selected == "killAction" or self.selected == "canvasAction" then
+		elseif self.selected == "killAction" then
 			self.selected = self.selections["backButton"]
 		end
-	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
+	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selected == "backButton" then
 			toState = game.preparationPhase
 		elseif self.selected == "executeButton" then
@@ -100,17 +120,21 @@ function ActPhase.keypressed(self, key)
 				print("Can't take more actions today")
 			end
 		elseif self.selected == "canvasAction" then
-			table.insert(self.actionsToExecute, CanvasAction())
+			if table.getn(self.actionsToExecute) < game.player.actions then
+				table.insert(self.actionsToExecute, CanvasAction())
+			else
+				print("Can't take more actions today")
+			end
 		end
 	end
 end
 
 function ActPhase.keyreleased(self, key )
-
+	--
 end
 
 function ActPhase.mousepressed(self, x, y, button)
-	--noop
+	--
 end
 
 function ActPhase.update(self, dt)

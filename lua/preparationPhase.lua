@@ -42,9 +42,25 @@ function PreparationPhase.draw(self)
 
 	love.graphics.setColor(255, 255, 255, 255)
 
-	love.graphics.draw(self.menuButton, 25, 560)
-	love.graphics.draw(self.saveButton, 360, 560)
-	love.graphics.draw(self.beginButton, 695, 560)
+	if self.selected == "menuButton" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 25, 560, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 25, 560, 0, 2, 2)
+	end
+	love.graphics.print("Menu", 35, 560)
+	if self.selected == "saveButton" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 360, 560, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 360, 560, 0, 2, 2)
+	end
+	love.graphics.print("Save", 370, 560)
+	if self.selected == "beginButton" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 695, 560, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 695, 560, 0, 2, 2)
+	end
+	love.graphics.print("Begin", 705, 560)
+
 	
 	if self.selected == "town" then
 		love.graphics.draw(images:getImage("buttonHighlight"), 10, 10, 0, 2, 2)
@@ -109,24 +125,24 @@ function PreparationPhase.draw(self)
 	end
 end
 
-function PreparationPhase.keypressed(self, key)
+function PreparationPhase.processControls(self, input)
 	if self.selectedTab ~= "" then
-		if key == keyBindings:getSubtool() then
+		if controls:isBack(input) then
 			self.lastSelectedTab = self.selectedTab
 			self.selectedTab = ""
 		else
-			if key == keyBindings:getUp() then
+			if controls:isUp(input) then
 				if self.rowDisplayed > 1 then
 					self.rowDisplayed = self.rowDisplayed - 1
 				end
-			elseif key == keyBindings:getDown() then
+			elseif controls:isDown(input) then
 				if self.rowDisplayed < math.ceil(table.getn(game.town.citizens)/4) then
 					self.rowDisplayed = self.rowDisplayed + 1
 				end
 			end
 		end
 	else
-		if key == keyBindings:getMenu() or key == keyBindings:getTool() then
+		if controls:isMenu(input) or controls:isConfirm(input) then
 			if self.selected == "menuButton" then
 				toState = mainMenu
 			elseif self.selected == "saveButton" then
@@ -141,15 +157,15 @@ function PreparationPhase.keypressed(self, key)
 			elseif self.selected == "party" then
 				self.selectedTab = self.selections["party"]
 			end
-		elseif key == keyBindings:getUp() then
+		elseif controls:isUp(input) then
 			if self.selected == "beginButton" or self.selected == "saveButton" or self.selected == "menuButton" then
 				self.selected = self.selections["town"]
 			end
-		elseif key == keyBindings:getDown() then
+		elseif controls:isDown(input) then
 			if self.selected == "town" or self.selected == "quests" or self.selected == "party" then
 				self.selected = self.selections["beginButton"]
 			end
-		elseif key == keyBindings:getLeft() then
+		elseif controls:isLeft(input) then
 			if self.selected == "beginButton" then
 				self.selected = self.selections["saveButton"]
 			elseif self.selected == "saveButton" then
@@ -159,7 +175,7 @@ function PreparationPhase.keypressed(self, key)
 			elseif self.selected == "quests" then
 				self.selected = self.selections["town"]
 			end
-		elseif key == keyBindings:getRight() then	
+		elseif controls:isRight(input) then	
 			if self.selected == "menuButton" then
 				self.selected = self.selections["saveButton"]
 			elseif self.selected == "saveButton" then
@@ -174,7 +190,7 @@ function PreparationPhase.keypressed(self, key)
 end
 
 function PreparationPhase.keyreleased(self, key )
-
+	--
 end
 
 function PreparationPhase.mousepressed(self, x, y, button)

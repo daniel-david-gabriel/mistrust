@@ -42,9 +42,6 @@ function MainMenu:_init()
 end
 
 function MainMenu.draw(self)
-	--love.graphics.setColor(51, 153, 102, 255)
-	--love.graphics.rectangle("fill", 0, 0, 800, 600)
-
 	--determine scaling for background image
 	local width = love.graphics.getWidth()
 	local height = love.graphics.getHeight()
@@ -69,23 +66,48 @@ function MainMenu.draw(self)
 
 	love.graphics.draw(self.title, 0, 0)
 
-	--love.graphics.rectangle("fill", 575, 50 + 50 *self.selection, 25, 25)
 	screen:drawCursor(295, 270 + 32*self.selection)
 end
 
+function MainMenu.update(self, dt)
+	music:playMusic("prelude")
+
+	if self.cloudTimer <= 0 then
+		if self.numberOfClouds < self.maxClouds then
+			self.cloudPositions[love.math.random(600) - 40] = 800
+			self.numberOfClouds = self.numberOfClouds + 1
+                        self.cloudTimer = love.math.random(100)
+        	end
+	else
+		self.cloudTimer = self.cloudTimer - (dt * 1000)
+	end
+
+	if self.cloudAlpha < 16 then
+		self.cloudAlpha = self.cloudAlpha + 1
+	end
+end
+--[[
 function MainMenu.keypressed(self, key)
-	if key == keyBindings:getUp() then
+	self:processControlls(key)
+end
+
+function MainMenu.gamepadpressed(self, button)
+	self:processControlls(key)
+end
+]]--
+function MainMenu.processControls(self, input)
+	if controls:isUp(input) then
 
 		if self.selection > 1 then
 			self.selection = self.selection - 1
 			--soundEffects:playSoundEffect(self.sfx)
 		end
-	elseif key == keyBindings:getDown() then
+	elseif controls:isDown(input) then
 		if self.selection < self.submenuCount then
 			self.selection = self.selection + 1
 			--soundEffects:playSoundEffect(self.sfx)
 		end
-	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
+	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
 			game:new()
 			toState = game
@@ -110,23 +132,5 @@ end
 
 function MainMenu.mousepressed(self, x, y, button)
 	--
-end
-
-function MainMenu.update(self, dt)
-	music:playMusic("prelude")
-
-	if self.cloudTimer <= 0 then
-		if self.numberOfClouds < self.maxClouds then
-			self.cloudPositions[love.math.random(600) - 40] = 800
-			self.numberOfClouds = self.numberOfClouds + 1
-                        self.cloudTimer = love.math.random(100)
-        	end
-	else
-		self.cloudTimer = self.cloudTimer - (dt * 1000)
-	end
-
-	if self.cloudAlpha < 16 then
-		self.cloudAlpha = self.cloudAlpha + 1
-	end
 end
 

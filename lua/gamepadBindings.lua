@@ -1,9 +1,9 @@
-KeyBindings = {}
-KeyBindings.__index = KeyBindings
+GamepadBindings = {}
+GamepadBindings.__index = GamepadBindings
 
 
-setmetatable(KeyBindings, {
-  __index = KeyBindings,
+setmetatable(GamepadBindings, {
+  __index = GamepadBindings,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,8 +11,8 @@ setmetatable(KeyBindings, {
   end,
 })
 
-function KeyBindings:_init()
-	self.bindingsFilename = "keyBindings.dat"
+function GamepadBindings:_init()
+	self.bindingsFilename = "gamepadBindings.dat"
 	self.bindings = {}
 
 	--Prepopulate bindings with defaults in case of incomplete bindings file
@@ -30,39 +30,39 @@ function KeyBindings:_init()
 	end
 end
 
-function KeyBindings.getQuit(self)
+function GamepadBindings.getQuit(self)
 	return self.bindings["quit"]
 end
 
-function KeyBindings.getUp(self)
+function GamepadBindings.getUp(self)
 	return self.bindings["up"]
 end
 
-function KeyBindings.getDown(self)
+function GamepadBindings.getDown(self)
 	return self.bindings["down"]
 end
 
-function KeyBindings.getLeft(self)
+function GamepadBindings.getLeft(self)
 	return self.bindings["left"]
 end
 
-function KeyBindings.getRight(self)
+function GamepadBindings.getRight(self)
 	return self.bindings["right"]
 end
 
-function KeyBindings.getMenu(self)
+function GamepadBindings.getMenu(self)
 	return self.bindings["menu"]
 end
 
-function KeyBindings.getBack(self)
+function GamepadBindings.getBack(self)
 	return self.bindings["back"]
 end
 
-function KeyBindings.getConfirm(self)
+function GamepadBindings.getConfirm(self)
 	return self.bindings["confirm"]
 end
 
-function KeyBindings.loadBindings(self)
+function GamepadBindings.loadBindings(self)
 	local bindingsFileLines = love.filesystem.lines(self.bindingsFilename)
 
 	for line in bindingsFileLines do
@@ -73,7 +73,7 @@ function KeyBindings.loadBindings(self)
 	end
 end
 
-function KeyBindings.saveBindings(self)
+function GamepadBindings.saveBindings(self)
 	local savedBindings = ""
 	for k,v in pairs(self.bindings) do
 		savedBindings = savedBindings .. k .. " " .. v .. "\r\n"
@@ -81,4 +81,11 @@ function KeyBindings.saveBindings(self)
 
 	love.filesystem.write(self.bindingsFilename, savedBindings)
 end
+
+
+
+
+
+
+
 

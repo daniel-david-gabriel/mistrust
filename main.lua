@@ -1,4 +1,4 @@
-require("lua/keyBindings")
+require("lua/controls")
 require("lua/screen")
 require("lua/mainMenu")
 require("lua/loadingScreen")
@@ -20,7 +20,7 @@ function love.load()
 	mainMenu = MainMenu()
 
 	options = Options()
-	keyBindings = KeyBindings()
+	controls = Controls()
 
 	game = Game()
 end
@@ -35,11 +35,20 @@ function love.draw()
 end
 
 function love.keypressed(key)
-	if key == keyBindings:getQuit() then
+	if controls:isQuit(input) then
 		love.event.push("quit")
 		return
 	end
-	activeState:keypressed(key)
+	--activeState:keypressed(key)
+	activeState:processControls(key)
+end
+
+function love.gamepadpressed( joystick, button )
+	if options.debug then
+		print(button)
+	end
+	--activeState:gamepadpressed(button)
+	activeState:processControls(button)
 end
 
 function love.keyreleased(key)
