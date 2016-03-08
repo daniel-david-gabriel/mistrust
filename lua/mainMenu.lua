@@ -93,7 +93,7 @@ function MainMenu.keypressed(self, key)
 			game:load(Save("save.dat"))
 			toState = game
 		elseif self.selection == 3 then
-			--options
+			toState = options
 		elseif self.selection == 4 then
 			--credits
 		elseif self.selection == 5 then
@@ -129,3 +129,4 @@ function MainMenu.update(self, dt)
 		self.cloudAlpha = self.cloudAlpha + 1
 	end
 end
+

@@ -19,6 +19,8 @@ function Images:_init()
 	self.images["background"] = self:loadBackgroundTiles()
 
 	self.images["cursor"] = love.graphics.newImage("media/menu/cursor.png")
+	self.images["buttonBackground"] = love.graphics.newImage("media/menu/buttonBackground.png")
+	self.images["buttonHighlight"] = love.graphics.newImage("media/menu/buttonHighlight.png")
 
 	self.images["faces"] = self:loadFaces()
 end
@@ -30,9 +32,9 @@ end
 function Images.loadBackgroundTiles(self)
 	local pieces = {}
 
-	pieces["red"] = 78
-	pieces["green"] = 74
-	pieces["blue"] = 78
+	pieces["red"] = 255 --78
+	pieces["green"] = 249 --74
+	pieces["blue"] = 179 --78
 
 	local tiles = {}
 

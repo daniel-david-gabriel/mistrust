@@ -12,6 +12,7 @@ setmetatable(PreparationPhase, {
 
 function PreparationPhase:_init()
 	self.citizenIndex = 1
+	self.rowDisplayed = 1
 
 	self.selections = {
 		["town"] = "town",
@@ -22,6 +23,8 @@ function PreparationPhase:_init()
 		["beginButton"] = "beginButton"
 	}
 	self.selected = self.selections["beginButton"]
+	self.selectedTab = ""
+	self.lastSelectedTab = "town"
 
 	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
 	self.menuButton = love.graphics.newImage("media/menu/menuButton.png")
@@ -42,6 +45,27 @@ function PreparationPhase.draw(self)
 	love.graphics.draw(self.menuButton, 25, 560)
 	love.graphics.draw(self.saveButton, 360, 560)
 	love.graphics.draw(self.beginButton, 695, 560)
+	
+	if self.selected == "town" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 10, 10, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 10, 10, 0, 2, 2)
+	end
+	love.graphics.print("Town", 20, 10)
+	if self.selected == "quests" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 10 + images:getImage("buttonHighlight"):getWidth()*2, 10, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 10 + images:getImage("buttonHighlight"):getWidth()*2, 10, 0, 2, 2)
+	end
+	love.graphics.print("Quests", 20 + images:getImage("buttonHighlight"):getWidth()*2, 10)
+	if self.selected == "party" then
+		love.graphics.draw(images:getImage("buttonHighlight"), 10 + images:getImage("buttonHighlight"):getWidth()*4, 10, 0, 2, 2)
+	else
+		love.graphics.draw(images:getImage("buttonBackground"), 10 + images:getImage("buttonHighlight"):getWidth()*4, 10, 0, 2, 2)
+	end
+	love.graphics.print("Party", 20 + images:getImage("buttonHighlight"):getWidth()*4, 10)
+
+
 
 	--love.graphics.setColor(0, 0, 0, 255)
 	--local statusString = self.selections[self.selected] .. " Day: " .. game.town.day
@@ -59,45 +83,92 @@ function PreparationPhase.draw(self)
 	elseif self.selected == "menuButton" then
 		selectionX = 5
 		selectionY = 560
+	elseif self.selected == "town" then
+		selectionX = 10
+		selectionY = 10		
+	elseif self.selected == "quests" then
+		selectionX = 10+images:getImage("buttonHighlight"):getWidth()*2
+		selectionY = 10
+	elseif self.selected == "party" then
+		selectionX = 10+images:getImage("buttonHighlight"):getWidth()*4
+		selectionY = 10
 	end
 
 	screen:drawCursor(selectionX, selectionY)
 
-	screen:drawPortrait(50, 50, game.town.citizens[self.citizenIndex])
+	if self.selectedTab == "town" then
+		self:drawTownTab(255)
+	elseif self.selectedTab == "quest" then
+
+	elseif self.selectedTab == "party" then
+
+	else
+		if self.lastSelectedTab == "town" then
+			self:drawTownTab(128)
+		end
+	end
 end
 
 function PreparationPhase.keypressed(self, key)
-	if key == keyBindings:getUp() then
-		self.citizenIndex = self.citizenIndex - 1
-		if self.citizenIndex < 1 then
-			self.citizenIndex = 1
-
+	if self.selectedTab ~= "" then
+		if key == keyBindings:getSubtool() then
+			self.lastSelectedTab = self.selectedTab
+			self.selectedTab = ""
+		else
+			if key == keyBindings:getUp() then
+				if self.rowDisplayed > 1 then
+					self.rowDisplayed = self.rowDisplayed - 1
+				end
+			elseif key == keyBindings:getDown() then
+				if self.rowDisplayed < math.ceil(table.getn(game.town.citizens)/4) then
+					self.rowDisplayed = self.rowDisplayed + 1
+				end
+			end
 		end
-	elseif key == keyBindings:getDown() then
-		self.citizenIndex = self.citizenIndex + 1
-		if self.citizenIndex > table.getn(game.town.citizens) then
-			self.citizenIndex = table.getn(game.town.citizens)
-		end
-	elseif key == keyBindings:getLeft() then
-		if self.selected == "beginButton" then
-			self.selected = self.selections["saveButton"]
-		elseif self.selected == "saveButton" then
-			self.selected = self.selections["menuButton"]
-		end
-	elseif key == keyBindings:getRight() then	
-		if self.selected == "menuButton" then
-			self.selected = self.selections["saveButton"]
-		elseif self.selected == "saveButton" then
-			self.selected = self.selections["beginButton"]
-		end
-	elseif key == keyBindings:getMenu() or key == keyBindings:getTool() then
-		if self.selected == "menuButton" then
-			toState = mainMenu
-		elseif self.selected == "saveButton" then
-			--go to save menu?
-			game:save()
-		elseif self.selected == "beginButton" then
-			toState = game.actPhase
+	else
+		if key == keyBindings:getMenu() or key == keyBindings:getTool() then
+			if self.selected == "menuButton" then
+				toState = mainMenu
+			elseif self.selected == "saveButton" then
+				--go to save menu?
+				game:save()
+			elseif self.selected == "beginButton" then
+				toState = game.actPhase
+			elseif self.selected == "town" then
+				self.selectedTab = self.selections["town"]
+			elseif self.selected == "quests" then
+				self.selectedTab = self.selections["quests"]
+			elseif self.selected == "party" then
+				self.selectedTab = self.selections["party"]
+			end
+		elseif key == keyBindings:getUp() then
+			if self.selected == "beginButton" or self.selected == "saveButton" or self.selected == "menuButton" then
+				self.selected = self.selections["town"]
+			end
+		elseif key == keyBindings:getDown() then
+			if self.selected == "town" or self.selected == "quests" or self.selected == "party" then
+				self.selected = self.selections["beginButton"]
+			end
+		elseif key == keyBindings:getLeft() then
+			if self.selected == "beginButton" then
+				self.selected = self.selections["saveButton"]
+			elseif self.selected == "saveButton" then
+				self.selected = self.selections["menuButton"]
+			elseif self.selected == "party" then
+				self.selected = self.selections["quests"]
+			elseif self.selected == "quests" then
+				self.selected = self.selections["town"]
+			end
+		elseif key == keyBindings:getRight() then	
+			if self.selected == "menuButton" then
+				self.selected = self.selections["saveButton"]
+			elseif self.selected == "saveButton" then
+				self.selected = self.selections["beginButton"]
+			elseif self.selected == "town" then
+				self.selected = self.selections["quests"]
+			elseif self.selected == "quests" then
+				self.selected = self.selections["party"]
+			end
 		end
 	end
 end
@@ -114,7 +185,23 @@ function PreparationPhase.update(self, dt)
 	
 end
 
-function PreparationPhase.loadMaps(self)
+function PreparationPhase.drawTownTab(self, alpha)
+
+	local xOffset = 50
+	local yOffset = 50
+
+	for k,citizen in pairs(game.town.citizens) do
+		local row = math.ceil(k/5)
+		if row >= self.rowDisplayed and row < self.rowDisplayed + 3 then
+			screen:drawPortrait(xOffset, yOffset, game.town.citizens[k], alpha)
+			xOffset = xOffset + 150
+
+			if xOffset + 150 > love.graphics.getWidth() then
+				xOffset = 50
+				yOffset = yOffset + 150
+			end
+		end
+	end
 	
 end
 

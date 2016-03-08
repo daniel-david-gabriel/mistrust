@@ -54,15 +54,17 @@ function Screen.drawPhaseBackground(self)
 	love.graphics.draw(lowerRight, love.graphics.getWidth() - (lowerRight:getWidth()*2), love.graphics.getHeight() - (lowerRight:getHeight()*2), 0, 2, 2)
 end
 
-function Screen.drawPortrait(self, x, y, citizen)
+function Screen.drawPortrait(self, x, y, citizen, alpha)
+	alpha = alpha or 255
+
 	local width = 128
 	local height = 128
 
 	local background = images:getImage("background")
-	love.graphics.setColor(background["red"], background["green"], background["blue"], 255)
+	love.graphics.setColor(background["red"], background["green"], background["blue"], alpha)
 	love.graphics.rectangle("fill", x, y, width, height)
 
-	love.graphics.setColor(255, 255, 255, 255)
+	love.graphics.setColor(255, 255, 255, alpha)
 
 	local faces = images:getImage("faces")
 	local face = nil

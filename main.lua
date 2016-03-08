@@ -19,8 +19,8 @@ function love.load()
 
 	mainMenu = MainMenu()
 
-	keyBindings = KeyBindings()
 	options = Options()
+	keyBindings = KeyBindings()
 
 	game = Game()
 end
@@ -29,7 +29,7 @@ function love.draw()
 	activeState:draw()
 	
 	if options.displayFPS then
-		love.graphics.setColor(0, 0, 0, 255)
+		love.graphics.setColor(255, 255, 255, 255)
 		love.graphics.print(love.timer.getFPS(), 10, 10)
 	end
 end

@@ -37,3 +37,10 @@ function Music.playMusic(self, songName)
 	song:play()
 	self.currentSong = song
 end
+
+function Music.stopAllSounds(self)
+	if self.currentSong ~= "" then
+		self.currentSong:stop()
+	end
+end
+
