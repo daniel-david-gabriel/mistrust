@@ -22,7 +22,6 @@ function Options:_init()
 	self.soundOptions = SoundOptions()
 
 	self.displayFPS = false
-	self.sound = true
 	self.debug = false
 
 	self.submenuCount = 5

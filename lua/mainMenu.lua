@@ -1,3 +1,5 @@
+require("lua/menu/credits")
+
 MainMenu = {}
 MainMenu.__index = MainMenu
 
@@ -15,6 +17,8 @@ function MainMenu:_init()
 	self.title = love.graphics.newImage("media/menu/title.png")
         self.cloud = love.graphics.newImage("media/core/cloud.png")
 	self.sfx = "menu"
+
+	self.credits = Credits()
 
         self.numberOfClouds = 0
         self.maxClouds = 1000
@@ -113,7 +117,7 @@ function MainMenu.processControls(self, input)
 			toState = options
 			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 4 then
-			--credits
+			toState = self.credits
 		elseif self.selection == 5 then
 			love.event.push("quit")
 		end

@@ -16,6 +16,8 @@ setmetatable(Controls, {
 function Controls:_init()
 	self.keyBindings = KeyBindings()
 	self.gamepadBindings = GamepadBindings()
+
+	love.keyboard.setKeyRepeat(true)
 end
 
 function Controls.isQuit(self, input)

@@ -42,6 +42,8 @@ function VideoOptions:_init()
 		self.vsync = true
 	end
 
+	self.tempWindowSizeIndex = self.windowSizeIndex
+
 	self.submenuCount = 4
 	self.selection = 1
 	
@@ -50,7 +52,7 @@ end
 
 function VideoOptions.generateMenuText(self)
 	local menuText = ""
-	menuText = menuText .. "Window Size: " .. self.windowSizes[self.windowSizeIndex] .. "\n"
+	menuText = menuText .. "Window Size: " .. self.windowSizes[self.tempWindowSizeIndex] .. "\n"
 	menuText = menuText .. "Fullscreen: " .. tostring(self.fullscreen) .. "\n"
 	menuText = menuText .. "VSync: " .. tostring(self.vsync) .. "\n"
 	menuText = menuText .. "Back"
@@ -88,20 +90,21 @@ function VideoOptions.processControls(self, input)
 		end
 	elseif controls:isLeft(input) then
 		if self.selection == 1 then
-			if self.windowSizeIndex > 1 then
-				self.windowSizeIndex = self.windowSizeIndex - 1
+			if self.tempWindowSizeIndex > 1 then
+				self.tempWindowSizeIndex = self.tempWindowSizeIndex - 1
 			end
 			self.menuText = self:generateMenuText()
 		end
 	elseif controls:isRight(input) then
 		if self.selection == 1 then
-			if self.windowSizeIndex < table.getn(self.windowSizes) then
-				self.windowSizeIndex = self.windowSizeIndex + 1
+			if self.tempWindowSizeIndex < table.getn(self.windowSizes) then
+				self.tempWindowSizeIndex = self.tempWindowSizeIndex + 1
 			end
 			self.menuText = self:generateMenuText()
 		end
 	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
+			self.windowSizeIndex = self.tempWindowSizeIndex
 			local lineTokens = split(self.windowSizes[self.windowSizeIndex], "[^x]+")
 			local flags = {}
 			flags.fullscreen = self.fullscreen
@@ -109,6 +112,7 @@ function VideoOptions.processControls(self, input)
 			love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]), flags)
 			self.menuText = self:generateMenuText()
 		elseif self.selection == 2 then
+			self.tempWindowSizeIndex = self.windowSizeIndex --reset the temp index
 			self.fullscreen = not self.fullscreen
 			local lineTokens = split(self.windowSizes[self.windowSizeIndex], "[^x]+")
 			local flags = {}
@@ -117,6 +121,7 @@ function VideoOptions.processControls(self, input)
 			love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]), flags)
 			self.menuText = self:generateMenuText()
 		elseif self.selection == 3 then
+			self.tempWindowSizeIndex = self.windowSizeIndex --reset the temp index
 			self.vsync = not self.vsync
 			local lineTokens = split(self.windowSizes[self.windowSizeIndex], "[^x]+")
 			local flags = {}
@@ -125,6 +130,7 @@ function VideoOptions.processControls(self, input)
 			love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]), flags)
 			self.menuText = self:generateMenuText()
 		elseif self.selection == 4 then
+			self.tempWindowSizeIndex = self.windowSizeIndex --reset the temp index
 			--save changes back to file
 			local saveData = ""
 			saveData = saveData .. self.windowSizeIndex .. "\t" .. tostring(self.fullscreen) .. "\t" .. tostring(self.vsync)
@@ -132,6 +138,7 @@ function VideoOptions.processControls(self, input)
 
 			toState = options
 			soundEffects:playSoundEffect(self.sfx)
+			self.menuText = self:generateMenuText()
 		end
 	else
 		--

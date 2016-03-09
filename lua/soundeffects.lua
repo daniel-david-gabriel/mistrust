@@ -17,10 +17,6 @@ function SoundEffects:_init()
 end
 
 function SoundEffects.playSoundEffect(self, name)
-	if not options.sound then
-		return
-	end
-
 	local soundEffect = self.soundEffects[name]
 	if not soundEffect:isStopped() then
 		soundEffect:stop()

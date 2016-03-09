@@ -43,9 +43,9 @@ function love.keypressed(key)
 end
 
 function love.gamepadpressed( joystick, button )
-	--if options.debug then
+	if options.debug then
 		print(button)
-	--end
+	end
 	activeState:processControls(button)
 end
 

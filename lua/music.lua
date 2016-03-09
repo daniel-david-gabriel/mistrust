@@ -29,10 +29,6 @@ function Music:_init()
 end
 
 function Music.playMusic(self, songName)
-	if not options.sound then
-		return
-	end
-
 	local song = self.music[songName]
 	if self.currentSong == song then
 		return
