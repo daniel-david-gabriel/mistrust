@@ -29,6 +29,9 @@ function TownTab.draw(self)
 			screen:drawPortrait(xOffset, yOffset, game.town.citizens[k], alpha)
 			local detailsString = "Name: " .. game.town.citizens[k].name .. " Occupation: " .. game.town.citizens[k].occupation .. "\n"
 			detailsString = detailsString .. "Suspicion Level: " .. game.town.citizens[k].suspicious
+			if citizen.alive == 0 then
+				detailsString = detailsString .. " DEAD"
+			end
 			love.graphics.setColor(0, 0, 0, 255)
 			love.graphics.printf(detailsString, 200, yOffset, love.graphics.getWidth() - 200, "left")
 			yOffset = yOffset + 150

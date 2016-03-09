@@ -37,12 +37,36 @@ function Save.save(self, town, player)
 	--Save citizens
 	saveData = saveData .. "CITIZENS\r\n"
 	for k,citizen in pairs(town.citizens) do
-		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
+		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t"
+		saveData = saveData .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
 		saveData = saveData .. citizen.face.head .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.mouth .. "\t" .. citizen.face.hair .. "\t" .. citizen.face.accessories .. "\t"
 
 		for k,v in pairs(skills) do
 			saveData = saveData .. citizen.skills[k] .. "\t"
 		end
+
+		for k,v in pairs(skills) do
+			saveData = saveData .. citizen.skillsRevealed[k] .. "\t"
+		end
+
+		saveData = saveData .. "\r\n"
+	end
+
+	--Save morgue
+	saveData = saveData .. "MORGUE\r\n"
+	for k,citizen in pairs(town.morgue) do
+		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t"
+		saveData = saveData .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
+		saveData = saveData .. citizen.face.head .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.mouth .. "\t" .. citizen.face.hair .. "\t" .. citizen.face.accessories .. "\t"
+
+		for k,v in pairs(skills) do
+			saveData = saveData .. citizen.skills[k] .. "\t"
+		end
+
+		for k,v in pairs(skills) do
+			saveData = saveData .. citizen.skillsRevealed[k] .. "\t"
+		end
+
 		saveData = saveData .. "\r\n"
 	end
 
@@ -68,6 +92,7 @@ function Save.load(self)
 
 	local loadData = love.filesystem.lines(self.saveFilename)
 	local loadCitizens = false
+	local loadMorgue = false
 	local loadQuests = false
 	local loadChecks = false
 	local loadPlayer = false
@@ -84,11 +109,19 @@ function Save.load(self)
 			town.day = tonumber(lineTokens[2])
 		elseif lineTokens[1] == "CITIZENS" then
 			loadCitizens = true
+			loadMorgue = false
+			loadQuests = false
+			loadChecks = false
+			loadPlayer = false
+		elseif lineTokens[1] == "MORGUE" then
+			loadCitizens = false
+			loadMorgue = true
 			loadQuests = false
 			loadChecks = false
 			loadPlayer = false
 		elseif lineTokens[1] == "QUEST" then
 			loadCitizens = false
+			loadMorgue = false
 			loadQuests = true
 			loadChecks = false
 			loadPlayer = false
@@ -97,16 +130,19 @@ function Save.load(self)
 			currentQuest = nil
 
 			loadCitizens = false
+			loadMorgue = false
 			loadQuests = false
 			loadChecks = false
 			loadPlayer = false
 		elseif lineTokens[1] == "CHECKS" then
 			loadCitizens = false
+			loadMorgue = false
 			loadQuests = false
 			loadChecks = true
 			loadPlayer = false
 		elseif lineTokens[1] == "PLAYER" then
 			loadCitizens = false
+			loadMorgue = false
 			loadQuests = false
 			loadChecks = false
 			loadPlayer = true
@@ -115,19 +151,50 @@ function Save.load(self)
 				local citizen = Citizen()
 				citizen.name = lineTokens[1]
 				citizen.sex = tonumber(lineTokens[2])
-				citizen.taint = tonumber(lineTokens[3])
-				citizen.knows = tonumber(lineTokens[4])
-				citizen.suspicious = tonumber(lineTokens[5])
+				citizen.occupation = lineTokens[3]
+				citizen.alive = tonumber(lineTokens[4])
 
-				citizen.face = Face(tonumber(lineTokens[6]), tonumber(lineTokens[7]), tonumber(lineTokens[8]), tonumber(lineTokens[9]), tonumber(lineTokens[10]))
+				citizen.taint = tonumber(lineTokens[5])
+				citizen.knows = tonumber(lineTokens[6])
+				citizen.suspicious = tonumber(lineTokens[7])
 
-				local tokenIndex = 11
+				citizen.face = Face(tonumber(lineTokens[8]), tonumber(lineTokens[9]), tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]))
+
+				local tokenIndex = 13
 				for k,v in pairs(skills) do
 					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1
 				end
+				for k,v in pairs(skills) do
+					citizen.skillsRevealed[k] = tonumber(lineTokens[tokenIndex])
+					tokenIndex = tokenIndex + 1
+				end
 
 				table.insert(town.citizens, citizen)
+			elseif loadMorgue then
+				local citizen = Citizen()
+				citizen.name = lineTokens[1]
+				citizen.sex = tonumber(lineTokens[2])
+				citizen.occupation = lineTokens[3]
+				citizen.alive = tonumber(lineTokens[4])
+
+				citizen.taint = tonumber(lineTokens[5])
+				citizen.knows = tonumber(lineTokens[6])
+				citizen.suspicious = tonumber(lineTokens[7])
+
+				citizen.face = Face(tonumber(lineTokens[8]), tonumber(lineTokens[9]), tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]))
+
+				local tokenIndex = 13
+				for k,v in pairs(skills) do
+					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
+					tokenIndex = tokenIndex + 1
+				end
+				for k,v in pairs(skills) do
+					citizen.skillsRevealed[k] = tonumber(lineTokens[tokenIndex])
+					tokenIndex = tokenIndex + 1
+				end
+
+				table.insert(town.morgue, citizen)
 			elseif loadQuests then
 				currentQuest = Quest()
 				currentQuest.name = lineTokens[1]

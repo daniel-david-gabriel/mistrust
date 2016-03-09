@@ -3,6 +3,7 @@ require("lua/game/player")
 require("lua/preparationPhase")
 require("lua/actPhase")
 require("lua/resultsPhase")
+require("lua/game/phase/gameOver")
 require("lua/save")
 
 Game = {}
@@ -21,6 +22,9 @@ function Game:_init()
 	self.preparationPhase = PreparationPhase()
 	self.actPhase = ActPhase()
 	self.resultsPhase = ResultsPhase()
+	self.resultsPhase.toState = self.preparationPhase
+
+	self.gameOver = GameOver()
 end
 
 function Game.new(self)

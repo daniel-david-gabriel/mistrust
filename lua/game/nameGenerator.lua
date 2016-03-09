@@ -35,7 +35,7 @@ function NameGenerator.generate(self, sex)
 	local forename
 	local surname
 
-	if sex then
+	if sex == 1 then
 		forename = self.maleNames[love.math.random(table.getn(self.maleNames))]
 	else
 		forename = self.femaleNames[love.math.random(table.getn(self.femaleNames))]

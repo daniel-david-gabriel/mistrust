@@ -36,7 +36,11 @@ http://opengameart.org/content/mystery-manor
 License: CC-BY 3.0
 https://soundcloud.com/alexandr-zhelanov
 
+http://opengameart.org/content/bloody-wall
+License: CC0
 
+http://opengameart.org/content/parchement-textures
+License: CC0
 
 
 

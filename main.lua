@@ -6,6 +6,7 @@ require("lua/game")
 require("lua/options")
 require("lua/game/nameGenerator")
 require("lua/game/faceGenerator")
+require("lua/game/occupationGenerator")
 
 function love.load()
 	--myFont = love.graphics.newImageFont("media/core/font.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?\'\"0123456789-+")

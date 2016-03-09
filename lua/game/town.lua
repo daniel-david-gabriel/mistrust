@@ -19,22 +19,25 @@ function Town:_init()
 	self.day = 0
 
 	self.citizens = {}
+	self.morgue = {}
 	self.quests = {}
 end
 
 function Town.new(self)
 	self.name = "My Town"
-	self.townSize = 10
+	self.townSize = 25
 	self.day = 1
 
 	local nameGenerator = NameGenerator()
 	local faceGenerator = FaceGenerator()
+	local occupationGenerator = OccupationGenerator()
 
 	self.citizens = {}
+	self.morgue = {}
 
 	for i=1,self.townSize do
 		self.citizens[i] = Citizen()
-		self.citizens[i]:generate(nameGenerator, faceGenerator)
+		self.citizens[i]:generate(nameGenerator, faceGenerator, occupationGenerator)
 	end
 
 	self.quests = {}

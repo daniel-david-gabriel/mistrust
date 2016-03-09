@@ -22,6 +22,7 @@ function ResultsPhase:_init()
 	self.results = {}
 
 	self.readyToPrepare = false
+	self.toState = nil
 end
 
 function ResultsPhase.new(self)
@@ -81,8 +82,20 @@ end
 
 function ResultsPhase.update(self, dt)
 	if self.readyToPrepare then
+		local livingCitizens = filter(function (value) return value.alive == 1 end, game.town.citizens)
+		local deadCitizens = filter(function (value) return value.alive == 0 end, game.town.citizens)
+
+		game.town.citizens = livingCitizens
+		for _,citizen in pairs(deadCitizens) do
+			table.insert(game.town.morgue, citizen)
+		end
+
+print(table.getn(game.town.citizens))
+print(table.getn(game.town.morgue))
+
 		self.readyToPrepare = false
-		toState = game.preparationPhase
+		toState = self.toState
+		self.toState = game.preparationPhase
 		self.results = {}
 	end
 end

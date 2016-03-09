@@ -27,7 +27,7 @@ function KillActionTab.draw(self)
 	local yOffset = 50
 
 	for k,citizen in pairs(game.town.citizens) do
-		if k >= self.rowDisplayed and k < self.rowDisplayed + 3 then
+		if citizen.alive == 1 and k >= self.rowDisplayed and k < self.rowDisplayed + 3 then
 			screen:drawPortrait(xOffset, yOffset, game.town.citizens[k], alpha)
 			local detailsString = "Name: " .. game.town.citizens[k].name .. " Occupation: " .. game.town.citizens[k].occupation .. "\n"
 			detailsString = detailsString .. "Suspicion Level: " .. game.town.citizens[k].suspicious

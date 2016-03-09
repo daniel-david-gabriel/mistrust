@@ -16,6 +16,7 @@ end
 
 function KillAction.act(self)
 	local citizen = game.town.citizens[self.citizenToKill]
+print(citizen.name)
 	if citizen.taint == 1 then
 		game.player.taintedKilled = game.player.taintedKilled + 1
 
@@ -26,7 +27,8 @@ function KillAction.act(self)
 		game.player.innocentsKilled = game.player.innocentsKilled + 1
 	end
 
-	table.remove(game.town.citizens, self.citizenToKill)
+	--table.remove(game.town.citizens, self.citizenToKill)
+	game.town.citizens[self.citizenToKill].alive = 0
 
 	local resultString = "I ordered the execution of " .. citizen.name .. " today. Upon inspection of the corpse, we discovered "
 	
@@ -38,6 +40,8 @@ function KillAction.act(self)
 
 	if citizen.taint == 0 then
 		resultString = resultString .. " was only an innocent. May God have mercy on their soul."
+		--game over
+		game.resultsPhase.toState = game.gameOver
 	else
 		if citizen.knows == 0 then
 			resultString = resultString .. " was indeed corrupted by the taint."

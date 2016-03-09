@@ -18,7 +18,8 @@ function Screen.drawPhaseBackground(self)
 	love.graphics.setColor(255, 255, 255, 255)
 
 	local background = images:getImage("background")
-	love.graphics.setBackgroundColor(background["red"], background["green"], background["blue"], 255)
+	--love.graphics.setBackgroundColor(background["red"], background["green"], background["blue"], 255)
+	love.graphics.draw(images:getImage("parchment"), 0, 0, 0, love.graphics.getWidth() / images:getImage("parchment"):getWidth(), love.graphics.getHeight() / images:getImage("parchment"):getHeight())
 
 	local upperLeft = background["tiles"]["upperLeft"]
 	local upper = background["tiles"]["upper"]
