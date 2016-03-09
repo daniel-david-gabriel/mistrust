@@ -16,12 +16,16 @@ setmetatable(ActPhase, {
 function ActPhase:_init()
 
 	self.selections = {
-		["backButton"] = "backButton",
-		["executeButton"] = "executeButton",
-		["killAction"] = "killAction",
-		["canvasAction"] = "canvasAction"
+		["back"]         = {name="back", x=5, y=560, up="killAction", down="back", left="back", right="confirm",
+		                    confirm=function() toState = game.preparationPhase end},
+		["confirm"]      = {name="confirm", x=685, y=560, up="killAction", down="confirm", left="back", right="confirm",
+							confirm=function() game.actPhase.readyToExecute = true end},
+		["killAction"]   = {name="killAction", x=25, y=128, up="canvasAction", down="back", left="killAction", right="killAction",
+							confirm=function() game.actPhase.selectedTab = "killAction" end},
+		["canvasAction"] = {name="canvasAction", x=25, y=25, up="canvasAction", down="killAction", left="canvasAction", right="canvasAction",
+							confirm=function() table.insert(game.actPhase.actionsToExecute, CanvasAction()) end}
 	}
-	self.selected = self.selections["executeButton"]
+	self.selected = self.selections["confirm"]
 
 	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
 	self.backButton = love.graphics.newImage("media/menu/backButton.png")
@@ -41,14 +45,14 @@ end
 function ActPhase.draw(self)
 	screen:drawPhaseBackground()
 
-	if self.selected == "backButton" then
+	if self.selected.name == "back" then
 		love.graphics.draw(images:getImage("buttonHighlight"), 25, 560, 0, 2, 2)
 	else
 		love.graphics.draw(images:getImage("buttonBackground"), 25, 560, 0, 2, 2)
 	end
 	love.graphics.print("Back", 35, 560)
 
-	if self.selected == "executeButton" then
+	if self.selected.name == "confirm" then
 		love.graphics.draw(images:getImage("buttonHighlight"), 695, 560, 0, 2, 2)
 	else
 		love.graphics.draw(images:getImage("buttonBackground"), 695, 560, 0, 2, 2)
@@ -61,27 +65,8 @@ function ActPhase.draw(self)
 	love.graphics.print("Canvas", 30, 30)
 	love.graphics.print("Kill", 30, 30 + actionTemplate:getHeight()*2)
 
-	local selectionX = -1
-	local selectionY = -1
-
 	if self.selectedTab == "" then
-		if self.selected == "executeButton" then
-			selectionX = 685
-			selectionY = 560
-		elseif self.selected == "backButton" then
-			selectionX = 5
-			selectionY = 560
-		elseif self.selected == "canvasAction" then
-			selectionX = 25
-			selectionY = 25
-		elseif self.selected == "killAction" then
-			selectionX = 25
-			selectionY = 25 + actionTemplate:getHeight()*2
-		end
-	end
-
-	if selectionX >= 0 and selectionY >= 0 then
-		screen:drawCursor(selectionX, selectionY)
+		screen:drawCursor(self.selected.x, self.selected.y)
 	end
 
 	if self.selectedTab == "killAction" then
@@ -98,39 +83,15 @@ function ActPhase.processControls(self, input)
 		end
 	else
 		if controls:isLeft(input) then
-			if self.selected == "executeButton" then
-				self.selected = self.selections["backButton"]
-			end
+			self.selected = self.selections[self.selected.left]
 		elseif controls:isRight(input) then	
-			if self.selected == "backButton" then
-				self.selected = self.selections["executeButton"]
-			end
-		elseif controls:isUp(input) then	
-			if self.selected == "executeButton" or self.selected == "backButton" then
-				self.selected = self.selections["killAction"]
-			elseif self.selected == "killAction" then
-				self.selected = self.selections["canvasAction"]
-			end
+			self.selected = self.selections[self.selected.right]
+		elseif controls:isUp(input) then
+			self.selected = self.selections[self.selected.up]
 		elseif controls:isDown(input) then
-			if self.selected == "canvasAction" then
-				self.selected = self.selections["killAction"]
-			elseif self.selected == "killAction" then
-				self.selected = self.selections["backButton"]
-			end
-		elseif controls:isMenu(input) or controls:isConfirm(input) then
-			if self.selected == "backButton" then
-				toState = game.preparationPhase
-			elseif self.selected == "executeButton" then
-				self.readyToExecute = true
-			elseif self.selected == "killAction" then
-				self.selectedTab = "killAction"
-			elseif self.selected == "canvasAction" then
-				if table.getn(self.actionsToExecute) < game.player.actions then
-					table.insert(self.actionsToExecute, CanvasAction())
-				else
-					print("Can't take more actions today")
-				end
-			end
+			self.selected = self.selections[self.selected.down]
+		elseif controls:isConfirm(input) then
+			self.selected.confirm()
 		end
 	end
 end
@@ -157,4 +118,3 @@ function ActPhase.update(self, dt)
 		self.actionsToExecute = {}
 	end
 end
-

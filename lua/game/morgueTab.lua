@@ -1,8 +1,8 @@
-TownTab = {}
-TownTab.__index = TownTab
+MorgueTab = {}
+MorgueTab.__index = MorgueTab
 
-setmetatable(TownTab, {
-  __index = TownTab,
+setmetatable(MorgueTab, {
+  __index = MorgueTab,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -10,21 +10,20 @@ setmetatable(TownTab, {
   end,
 })
 
-function TownTab:_init()
+function MorgueTab:_init()
 	self.rowDisplayed = 1
 	self.rowSelected = 1
 	self.citizenSelected = 1
 end
 
-function TownTab.new(self)
+function MorgueTab.new(self)
 
 end
 
-function TownTab.draw(self)
+function MorgueTab.draw(self)
 	local xOffset = 50
 	local yOffset = 50
-
-	for k,citizen in pairs(game.town.citizens) do
+	for k,citizen in pairs(game.town.morgue) do
 		if k >= self.rowDisplayed and k < self.rowDisplayed + 3 then
 			screen:drawPortrait(xOffset, yOffset, citizen, alpha)
 			local detailsString = "Name: " .. citizen.name .. " Occupation: " .. citizen.occupation .. "\n"
@@ -43,7 +42,7 @@ function TownTab.draw(self)
 	screen:drawCursor(selectionX, selectionY)
 end
 
-function TownTab.processControls(self, input)
+function MorgueTab.processControls(self, input)
 	if controls:isUp(input) then
 		if self.rowDisplayed > 1 and self.rowSelected == 1 then
 			self.rowDisplayed = self.rowDisplayed - 1
@@ -53,7 +52,7 @@ function TownTab.processControls(self, input)
 			self.citizenSelected = self.citizenSelected - 1
 		end
 	elseif controls:isDown(input) then
-		if self.citizenSelected < table.getn(game.town.citizens) and self.rowSelected == 3 then
+		if self.citizenSelected < table.getn(game.town.morgue) and self.rowSelected == 3 then
 			self.rowDisplayed = self.rowDisplayed + 1
 			self.citizenSelected = self.citizenSelected + 1
 		elseif self.rowSelected < 3 then
@@ -61,19 +60,19 @@ function TownTab.processControls(self, input)
 			self.citizenSelected = self.citizenSelected + 1
 		end
 	elseif controls:isConfirm(input) then
-		print(game.town.citizens[self.citizenSelected].name)
+		print(game.town.morgue[self.citizenSelected].name)
 	end
 end
 
-function TownTab.keyreleased(self, key )
+function MorgueTab.keyreleased(self, key )
 	--
 end
 
-function TownTab.mousepressed(self, x, y, button)
+function MorgueTab.mousepressed(self, x, y, button)
 	--noop
 end
 
-function TownTab.update(self, dt)
+function MorgueTab.update(self, dt)
 
 end
 
