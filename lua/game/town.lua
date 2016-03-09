@@ -24,7 +24,7 @@ end
 
 function Town.new(self)
 	self.name = "My Town"
-	self.townSize = 1000
+	self.townSize = 10
 	self.day = 1
 
 	local nameGenerator = NameGenerator()

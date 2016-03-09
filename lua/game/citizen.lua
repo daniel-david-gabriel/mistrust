@@ -22,6 +22,7 @@ function Citizen:_init()
 	self.suspicious = 0
 
 	self.skills = {}
+	--skills hidden / revealed
 end
 
 function Citizen.generate(self, nameGenerator, faceGenerator)

@@ -22,6 +22,9 @@ function Images:_init()
 	self.images["buttonBackground"] = love.graphics.newImage("media/menu/buttonBackground.png")
 	self.images["buttonHighlight"] = love.graphics.newImage("media/menu/buttonHighlight.png")
 
+	self.images["suspicious"] = love.graphics.newImage("media/menu/suspicious.png")
+	self.images["marked"] = love.graphics.newImage("media/menu/marked.png")
+
 	self.images["faces"] = self:loadFaces()
 end
 

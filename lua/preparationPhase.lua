@@ -1,3 +1,5 @@
+require("lua/game/townTab")
+
 PreparationPhase = {}
 PreparationPhase.__index = PreparationPhase
 
@@ -25,6 +27,8 @@ function PreparationPhase:_init()
 	self.selected = self.selections["beginButton"]
 	self.selectedTab = ""
 	self.lastSelectedTab = "town"
+
+	self.townTab = TownTab()
 
 	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
 	self.menuButton = love.graphics.newImage("media/menu/menuButton.png")
@@ -81,46 +85,45 @@ function PreparationPhase.draw(self)
 	end
 	love.graphics.print("Party", 20 + images:getImage("buttonHighlight"):getWidth()*4, 10)
 
+	local selectionX = -1
+	local selectionY = -1
 
-
-	--love.graphics.setColor(0, 0, 0, 255)
-	--local statusString = self.selections[self.selected] .. " Day: " .. game.town.day
-	--love.graphics.print(statusString, 10, 5)
-
-	local selectionX = 0
-	local selectionY = 0
-
-	if self.selected == "beginButton" then
-		selectionX = 685
-		selectionY = 560
-	elseif self.selected == "saveButton" then
-		selectionX = 350
-		selectionY = 560
-	elseif self.selected == "menuButton" then
-		selectionX = 5
-		selectionY = 560
-	elseif self.selected == "town" then
-		selectionX = 10
-		selectionY = 10		
-	elseif self.selected == "quests" then
-		selectionX = 10+images:getImage("buttonHighlight"):getWidth()*2
-		selectionY = 10
-	elseif self.selected == "party" then
-		selectionX = 10+images:getImage("buttonHighlight"):getWidth()*4
-		selectionY = 10
+	if self.selectedTab == "" then
+		if self.selected == "beginButton" then
+			selectionX = 685
+			selectionY = 560
+		elseif self.selected == "saveButton" then
+			selectionX = 350
+			selectionY = 560
+		elseif self.selected == "menuButton" then
+			selectionX = 5
+			selectionY = 560
+		elseif self.selected == "town" then
+			selectionX = 10
+			selectionY = 10		
+		elseif self.selected == "quests" then
+			selectionX = 10+images:getImage("buttonHighlight"):getWidth()*2
+			selectionY = 10
+		elseif self.selected == "party" then
+			selectionX = 10+images:getImage("buttonHighlight"):getWidth()*4
+			selectionY = 10
+		end
 	end
 
-	screen:drawCursor(selectionX, selectionY)
+	if selectionX >= 0 and selectionY >= 0 then
+		screen:drawCursor(selectionX, selectionY)
+	end
 
 	if self.selectedTab == "town" then
-		self:drawTownTab(255)
+		self.townTab:draw()
 	elseif self.selectedTab == "quest" then
 
 	elseif self.selectedTab == "party" then
 
 	else
 		if self.lastSelectedTab == "town" then
-			self:drawTownTab(128)
+			self.townTab:draw()
+			--overlay gray out?
 		end
 	end
 end
@@ -131,14 +134,8 @@ function PreparationPhase.processControls(self, input)
 			self.lastSelectedTab = self.selectedTab
 			self.selectedTab = ""
 		else
-			if controls:isUp(input) then
-				if self.rowDisplayed > 1 then
-					self.rowDisplayed = self.rowDisplayed - 1
-				end
-			elseif controls:isDown(input) then
-				if self.rowDisplayed < math.ceil(table.getn(game.town.citizens)/4) then
-					self.rowDisplayed = self.rowDisplayed + 1
-				end
+			if self.selectedTab == "town" then
+				self.townTab:processControls(input)
 			end
 		end
 	else
@@ -199,25 +196,5 @@ end
 
 function PreparationPhase.update(self, dt)
 	music:playMusic("main")
-end
-
-function PreparationPhase.drawTownTab(self, alpha)
-
-	local xOffset = 50
-	local yOffset = 50
-
-	for k,citizen in pairs(game.town.citizens) do
-		local row = math.ceil(k/5)
-		if row >= self.rowDisplayed and row < self.rowDisplayed + 3 then
-			screen:drawPortrait(xOffset, yOffset, game.town.citizens[k], alpha)
-			xOffset = xOffset + 150
-
-			if xOffset + 150 > love.graphics.getWidth() then
-				xOffset = 50
-				yOffset = yOffset + 150
-			end
-		end
-	end
-	
 end
 

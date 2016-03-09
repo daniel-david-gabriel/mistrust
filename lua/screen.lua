@@ -101,6 +101,12 @@ function Screen.drawPortrait(self, x, y, citizen, alpha)
 	love.graphics.draw(upperRight, x + width - (upperRight:getWidth()*2), y, 0, 2, 2)
 	love.graphics.draw(lowerLeft, x, y + height - (lowerLeft:getHeight()*2), 0, 2, 2)
 	love.graphics.draw(lowerRight, x + width - (lowerRight:getWidth()*2), y + height - (lowerRight:getHeight()*2), 0, 2, 2)
+
+	if citizen.suspicious == 50 then
+		love.graphics.draw(images:getImage("suspicious"), x + width - images:getImage("suspicious"):getWidth(), y + height - images:getImage("suspicious"):getHeight(), 0, 2, 2)
+	elseif citizen.suspicious >= 100 then
+		love.graphics.draw(images:getImage("marked"), x + width - images:getImage("marked"):getWidth(), y + height - images:getImage("marked"):getHeight(), 0, 2, 2)
+	end
 end
 
 function Screen.drawCursor(self, x, y)

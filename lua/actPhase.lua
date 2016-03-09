@@ -1,4 +1,4 @@
-require("lua/game/actions/killAction")
+require("lua/game/actions/killActionTab")
 require("lua/game/actions/canvasAction")
 
 ActPhase = {}
@@ -26,6 +26,9 @@ function ActPhase:_init()
 	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
 	self.backButton = love.graphics.newImage("media/menu/backButton.png")
 	self.executeButton = love.graphics.newImage("media/menu/executeButton.png")
+
+	self.selectedTab = ""
+	self.killActionTab = KillActionTab()
 
 	self.readyToExecute = false
 	self.actionsToExecute = {}
@@ -58,72 +61,75 @@ function ActPhase.draw(self)
 	love.graphics.print("Canvas", 30, 30)
 	love.graphics.print("Kill", 30, 30 + actionTemplate:getHeight()*2)
 
-	local selectionX = 0
-	local selectionY = 0
+	local selectionX = -1
+	local selectionY = -1
 
-	if self.selected == "executeButton" then
-		selectionX = 685
-		selectionY = 560
-	elseif self.selected == "backButton" then
-		selectionX = 5
-		selectionY = 560
-	elseif self.selected == "canvasAction" then
-		selectionX = 25
-		selectionY = 25
-	elseif self.selected == "killAction" then
-		selectionX = 25
-		selectionY = 25 + actionTemplate:getHeight()*2
+	if self.selectedTab == "" then
+		if self.selected == "executeButton" then
+			selectionX = 685
+			selectionY = 560
+		elseif self.selected == "backButton" then
+			selectionX = 5
+			selectionY = 560
+		elseif self.selected == "canvasAction" then
+			selectionX = 25
+			selectionY = 25
+		elseif self.selected == "killAction" then
+			selectionX = 25
+			selectionY = 25 + actionTemplate:getHeight()*2
+		end
 	end
 
-	screen:drawCursor(selectionX, selectionY)
+	if selectionX >= 0 and selectionY >= 0 then
+		screen:drawCursor(selectionX, selectionY)
+	end
+
+	if self.selectedTab == "killAction" then
+		self.killActionTab:draw()
+	end
 end
 
 function ActPhase.processControls(self, input)
-	if controls:isLeft(input) then
-		if self.selected == "executeButton" then
-			self.selected = self.selections["backButton"]
+	if self.selectedTab ~= "" then
+		if controls:isBack(input) then
+			self.selectedTab = ""
+		elseif self.selectedTab == "killAction" then
+			self.killActionTab:processControls(input)
 		end
-	elseif controls:isRight(input) then	
-		if self.selected == "backButton" then
-			self.selected = self.selections["executeButton"]
-		end
-	elseif controls:isUp(input) then	
-		if self.selected == "executeButton" or self.selected == "backButton" then
-			self.selected = self.selections["killAction"]
-		elseif self.selected == "killAction" then
-			self.selected = self.selections["canvasAction"]
-		end
-	elseif controls:isDown(input) then
-		if self.selected == "canvasAction" then
-			self.selected = self.selections["killAction"]
-		elseif self.selected == "killAction" then
-			self.selected = self.selections["backButton"]
-		end
-	elseif controls:isMenu(input) or controls:isConfirm(input) then
-		if self.selected == "backButton" then
-			toState = game.preparationPhase
-		elseif self.selected == "executeButton" then
-			self.readyToExecute = true
-		elseif self.selected == "killAction" then
-			if table.getn(self.actionsToExecute) < game.player.actions then
-				if table.getn(game.town.citizens) > 0 then
-					local citizen = nil
-					for k,v in pairs(game.town.citizens) do
-						citizen = k
-						break
-					end
-					table.insert(self.actionsToExecute, KillAction(citizen))
-				else
-					print("No one left in town to kill")
-				end
-			else
-				print("Can't take more actions today")
+	else
+		if controls:isLeft(input) then
+			if self.selected == "executeButton" then
+				self.selected = self.selections["backButton"]
 			end
-		elseif self.selected == "canvasAction" then
-			if table.getn(self.actionsToExecute) < game.player.actions then
-				table.insert(self.actionsToExecute, CanvasAction())
-			else
-				print("Can't take more actions today")
+		elseif controls:isRight(input) then	
+			if self.selected == "backButton" then
+				self.selected = self.selections["executeButton"]
+			end
+		elseif controls:isUp(input) then	
+			if self.selected == "executeButton" or self.selected == "backButton" then
+				self.selected = self.selections["killAction"]
+			elseif self.selected == "killAction" then
+				self.selected = self.selections["canvasAction"]
+			end
+		elseif controls:isDown(input) then
+			if self.selected == "canvasAction" then
+				self.selected = self.selections["killAction"]
+			elseif self.selected == "killAction" then
+				self.selected = self.selections["backButton"]
+			end
+		elseif controls:isMenu(input) or controls:isConfirm(input) then
+			if self.selected == "backButton" then
+				toState = game.preparationPhase
+			elseif self.selected == "executeButton" then
+				self.readyToExecute = true
+			elseif self.selected == "killAction" then
+				self.selectedTab = "killAction"
+			elseif self.selected == "canvasAction" then
+				if table.getn(self.actionsToExecute) < game.player.actions then
+					table.insert(self.actionsToExecute, CanvasAction())
+				else
+					print("Can't take more actions today")
+				end
 			end
 		end
 	end
