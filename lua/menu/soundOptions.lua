@@ -39,9 +39,9 @@ end
 
 function SoundOptions.generateMenuText(self)
 	local menuText = ""
-	menuText = menuText .. "Master: " .. self.masterVolume .. "\n"
-	menuText = menuText .. "BGM: " .. self.bgmVolume .. "\n"
-	menuText = menuText .. "SFX: " .. self.sfxVolume .. "\n"
+	menuText = menuText .. "Master: " .. self.masterVolume*10 .. "\n"
+	menuText = menuText .. "BGM: " .. self.bgmVolume*10 .. "\n"
+	menuText = menuText .. "SFX: " .. self.sfxVolume*10 .. "\n"
 	menuText = menuText .. "Back"
 
 	return menuText
@@ -122,6 +122,7 @@ function SoundOptions.processControls(self, input)
 			love.filesystem.write(self.soundOptionsFilename, saveData)
 
 			toState = options
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	else
 		--

@@ -13,19 +13,18 @@ setmetatable(VideoOptions, {
 
 function VideoOptions:_init()
 	self.background = love.graphics.newImage("media/menu/darkBackground.png")
-
+	self.sfx = "menu"
 	self.videoOptionsFilename = "videoOptions.dat"
 
-	self.windowSizes = {
-		["640x480"] = "640x480",
-		["800x600"] = "800x600"
+	self.windowSizes = {"640x480", "800x600", "1024x768", "1152x720", "1152x864",
+			"1280x800", "1280x960", "1280x1024", "1446x900", "1680x1050"
 	}
 
 	if love.filesystem.exists(self.videoOptionsFilename) then
 		local videoOptions = love.filesystem.lines(self.videoOptionsFilename)
 		for line in videoOptions do
 			local lineTokens = split(line, "[^\t]+")
-			self.windowSize = lineTokens[1]
+			self.windowSizeIndex = tonumber(lineTokens[1])
 			if lineTokens[2] == "true" then
 				self.fullscreen = true 
 			else 
@@ -38,24 +37,28 @@ function VideoOptions:_init()
 			end
 		end
 	else
-		self.windowSize = self.windowSizes["800x600"]
+		self.windowSizeIndex = 2
 		self.fullscreen = false
-		self.vsync = false
+		self.vsync = true
 	end
 
 	self.submenuCount = 4
 	self.selection = 1
 	
-	self.menuText = ""
-	self.menuText = self.menuText .. "Window Size\n"
-	self.menuText = self.menuText .. "Fullscreen\n"
-	self.menuText = self.menuText .. "VSync\n"
-	self.menuText = self.menuText .. "Back"
+	self.menuText = self:generateMenuText()
+end
+
+function VideoOptions.generateMenuText(self)
+	local menuText = ""
+	menuText = menuText .. "Window Size: " .. self.windowSizes[self.windowSizeIndex] .. "\n"
+	menuText = menuText .. "Fullscreen: " .. tostring(self.fullscreen) .. "\n"
+	menuText = menuText .. "VSync: " .. tostring(self.vsync) .. "\n"
+	menuText = menuText .. "Back"
+
+	return menuText
 end
 
 function VideoOptions.draw(self)
-	--love.graphics.setColor(51, 153, 102, 255)
-	--love.graphics.rectangle("fill", 0, 0, 800, 600)
 
 	--determine scaling for background image
 	local width = love.graphics.getWidth()
@@ -74,35 +77,61 @@ end
 
 function VideoOptions.processControls(self, input)
 	if controls:isUp(input) then
-
 		if self.selection > 1 then
 			self.selection = self.selection - 1
-			--soundEffects:playSoundEffect(self.sfx)
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	elseif controls:isDown(input) then
 		if self.selection < self.submenuCount then
 			self.selection = self.selection + 1
-			--soundEffects:playSoundEffect(self.sfx)
+			soundEffects:playSoundEffect(self.sfx)
+		end
+	elseif controls:isLeft(input) then
+		if self.selection == 1 then
+			if self.windowSizeIndex > 1 then
+				self.windowSizeIndex = self.windowSizeIndex - 1
+			end
+			self.menuText = self:generateMenuText()
+		end
+	elseif controls:isRight(input) then
+		if self.selection == 1 then
+			if self.windowSizeIndex < table.getn(self.windowSizes) then
+				self.windowSizeIndex = self.windowSizeIndex + 1
+			end
+			self.menuText = self:generateMenuText()
 		end
 	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
-			--window size
+			local lineTokens = split(self.windowSizes[self.windowSizeIndex], "[^x]+")
+			local flags = {}
+			flags.fullscreen = self.fullscreen
+			flags.vsync = self.vsync
+			love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]), flags)
+			self.menuText = self:generateMenuText()
 		elseif self.selection == 2 then
 			self.fullscreen = not self.fullscreen
-			love.window.setFullscreen(self.fullscreen)
-			if not self.fullscreen then
-				local lineTokens = split(self.windowSize, "[^x]+")
-				love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]))
-			end
+			local lineTokens = split(self.windowSizes[self.windowSizeIndex], "[^x]+")
+			local flags = {}
+			flags.fullscreen = self.fullscreen
+			flags.vsync = self.vsync
+			love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]), flags)
+			self.menuText = self:generateMenuText()
 		elseif self.selection == 3 then
-			--vsync
+			self.vsync = not self.vsync
+			local lineTokens = split(self.windowSizes[self.windowSizeIndex], "[^x]+")
+			local flags = {}
+			flags.fullscreen = self.fullscreen
+			flags.vsync = self.vsync
+			love.window.setMode(tonumber(lineTokens[1]), tonumber(lineTokens[2]), flags)
+			self.menuText = self:generateMenuText()
 		elseif self.selection == 4 then
 			--save changes back to file
 			local saveData = ""
-			saveData = saveData .. self.windowSize .. "\t" .. tostring(self.fullscreen) .. "\t" .. tostring(self.vsync)
+			saveData = saveData .. self.windowSizeIndex .. "\t" .. tostring(self.fullscreen) .. "\t" .. tostring(self.vsync)
 			love.filesystem.write(self.videoOptionsFilename, saveData)
 
 			toState = options
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	else
 		--

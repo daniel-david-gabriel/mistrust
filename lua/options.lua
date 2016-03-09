@@ -54,7 +54,6 @@ end
 
 function Options.processControls(self, input)
 	if controls:isUp(input) then
-
 		if self.selection > 1 then
 			self.selection = self.selection - 1
 			soundEffects:playSoundEffect(self.sfx)
@@ -67,17 +66,20 @@ function Options.processControls(self, input)
 	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
 			toState = self.videoOptions
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 2 then
 			toState = self.soundOptions
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 3 then
-
+			--controls
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 4 then
 			self.displayFPS = not self.displayFPS
-			self.debug = not self.debug			
-			--self.fullscreen = not self.fullscreen
-			--love.window.setFullscreen(self.fullscreen)
+			self.debug = not self.debug
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 5 then
 			toState = mainMenu
+			soundEffects:playSoundEffect(self.sfx)
 		end
 	else
 		--

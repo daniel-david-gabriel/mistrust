@@ -104,11 +104,14 @@ function MainMenu.processControls(self, input)
 		if self.selection == 1 then
 			game:new()
 			toState = game
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 2 then
 			game:load(Save("save.dat"))
 			toState = game
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 3 then
 			toState = options
+			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 4 then
 			--credits
 		elseif self.selection == 5 then
