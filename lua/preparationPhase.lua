@@ -37,11 +37,6 @@ function PreparationPhase:_init()
 
 	self.townTab = TownTab()
 	self.morgueTab = MorgueTab()
-
-	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
-	self.menuButton = love.graphics.newImage("media/menu/menuButton.png")
-	self.saveButton = love.graphics.newImage("media/menu/saveButton.png")
-	self.beginButton = love.graphics.newImage("media/menu/beginButton.png")
 end
 
 function PreparationPhase.new(self)

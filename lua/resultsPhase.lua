@@ -16,9 +16,6 @@ function ResultsPhase:_init()
 	}
 	self.selected = self.selections["okButton"]
 
-	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
-	self.okButton = love.graphics.newImage("media/menu/okButton.png")
-
 	self.results = {}
 
 	self.readyToPrepare = false

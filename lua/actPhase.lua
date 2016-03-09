@@ -27,10 +27,6 @@ function ActPhase:_init()
 	}
 	self.selected = self.selections["confirm"]
 
-	self.maskImage = love.graphics.newImage("media/menu/preparationPhaseMask.png")
-	self.backButton = love.graphics.newImage("media/menu/backButton.png")
-	self.executeButton = love.graphics.newImage("media/menu/executeButton.png")
-
 	self.selectedTab = ""
 	self.killActionTab = KillActionTab()
 
