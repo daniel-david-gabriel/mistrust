@@ -44,3 +44,11 @@ function Citizen.generate(self, nameGenerator, faceGenerator, occupationGenerato
 		self.skillsRevealed[k] = 0
 	end
 end
+
+function Citizen.isTainted(self)
+	return self.taint == 1
+end
+
+function Citizen.isAgent(self)
+	return self.taint == 1 and self.knows == 1
+end

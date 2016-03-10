@@ -50,9 +50,9 @@ function ResultsPhase.draw(self)
 	local resultString = ""
 	resultString = resultString .. "Results of Day: " .. game.town.day - 1 .. "\n"
 	resultString = resultString .. "Town of: " .. game.town.name .. ", Population: " .. table.getn(game.town.citizens) .. "\n\n"
-	resultString = resultString .. "Tainted Killed: " .. game.player.taintedKilled .. "\n"
-	resultString = resultString .. "Agents Killed: " .. game.player.agentsKilled .. "\n"
-	resultString = resultString .. "Innocent Killed: " .. game.player.innocentsKilled .. "\n\n"
+	--resultString = resultString .. "Tainted Killed: " .. game.player.taintedKilled .. "\n"
+	--resultString = resultString .. "Agents Killed: " .. game.player.agentsKilled .. "\n"
+	--resultString = resultString .. "Innocent Killed: " .. game.player.innocentsKilled .. "\n\n"
 	
 	for _,result in pairs(self.results) do
 		resultString = resultString .. result .. "\n"
