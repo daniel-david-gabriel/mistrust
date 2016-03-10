@@ -21,6 +21,7 @@ function Town:_init()
 	self.citizens = {}
 	self.morgue = {}
 	self.quests = {}
+	self.jail = {}
 end
 
 function Town.new(self)
@@ -34,6 +35,7 @@ function Town.new(self)
 
 	self.citizens = {}
 	self.morgue = {}
+	self.jail = {}
 
 	for i=1,self.townSize do
 		self.citizens[i] = Citizen()

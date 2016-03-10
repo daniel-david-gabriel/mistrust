@@ -1,4 +1,7 @@
 require("lua/game/actions/killActionTab")
+require("lua/game/actions/interrogateActionTab")
+require("lua/game/actions/jailActionTab")
+require("lua/game/actions/releaseActionTab")
 require("lua/game/actions/endHuntAction")
 require("lua/game/actions/canvasAction")
 
@@ -20,19 +23,29 @@ function ActPhase:_init()
 	self.selections = {
 		["back"]          = UIElement("back", 5, 560, "endHuntAction", "back", "back", "confirm",
 									  function() toState = game.preparationPhase end, "buttonBackground", "buttonHighlight", "Back", 10, 5),
-		["confirm"]       = UIElement("confirm", 685, 560, "killAction", "confirm", "back", "confirm",
+		["confirm"]       = UIElement("confirm", 685, 560, "releaseAction", "confirm", "back", "confirm",
 									  function() game.actPhase.readyToExecute = true end, "buttonBackground", "buttonHighlight", "Confirm", 10, 5),
 		["killAction"]    = UIElement("killAction", 25, 128, "canvasAction", "endHuntAction", "killAction", "killAction",
 									  function() game.actPhase.selectedTab = "killAction" end, "actionBackground", "actionHighlight", "Kill", 50, 40),
-		["canvasAction"]  = UIElement("canvasAction", 25, 25, "canvasAction", "killAction", "canvasAction", "canvasAction",
+		["canvasAction"]  = UIElement("canvasAction", 25, 25, "canvasAction", "killAction", "canvasAction", "interrogateAction",
 									  function() table.insert(game.actPhase.actionsToExecute, CanvasAction()) end, "actionBackground", "actionHighlight", "Canvas Town", 50, 40),
 		["endHuntAction"] = UIElement("endHuntAction", 25, 256, "killAction", "back", "endHuntAction", "endHuntAction",
-									  function() table.insert(game.actPhase.actionsToExecute, EndHuntAction()) end, "actionBackground", "actionHighlight", "End Hunt", 50, 40)
+									  function() table.insert(game.actPhase.actionsToExecute, EndHuntAction()) end, "actionBackground", "actionHighlight", "End Hunt", 50, 40),
+		["interrogateAction"] = UIElement("interrogateAction", 400, 25, "interrogateAction", "jailAction", "canvasAction", "interrogateAction",
+									  function() game.actPhase.selectedTab = "interrogateAction" end, "actionBackground", "actionHighlight", "Interrogate", 50, 40),
+		["jailAction"] = UIElement("jailAction", 400, 128, "interrogateAction", "confirm", "killAction", "jailAction",
+									  function() game.actPhase.selectedTab = "jailAction" end, "actionBackground", "actionHighlight", "Indict", 50, 40),
+		["releaseAction"] = UIElement("releaseAction", 400, 256, "jailAction", "confirm", "killAction", "jailAction",
+									  function() game.actPhase.selectedTab = "releaseAction" end, "actionBackground", "actionHighlight", "Release", 50, 40),
+
 	}
 	self.selected = self.selections["confirm"]
 
 	self.selectedTab = ""
 	self.killActionTab = KillActionTab()
+	self.interrogateActionTab = InterrogateActionTab()
+	self.jailActionTab = JailActionTab()
+	self.releaseActionTab = ReleaseActionTab()
 
 	self.readyToExecute = false
 	self.actionsToExecute = {}
@@ -58,6 +71,12 @@ function ActPhase.draw(self)
 		screen:drawCursor(self.selected.x, self.selected.y)
 	elseif self.selectedTab == "killAction" then
 		self.killActionTab:draw()
+	elseif self.selectedTab == "interrogateAction" then
+		self.interrogateActionTab:draw()
+	elseif self.selectedTab == "jailAction" then
+		self.jailActionTab:draw()
+	elseif self.selectedTab == "releaseAction" then
+		self.releaseActionTab:draw()
 	end
 end
 
@@ -67,6 +86,12 @@ function ActPhase.processControls(self, input)
 			self.selectedTab = ""
 		elseif self.selectedTab == "killAction" then
 			self.killActionTab:processControls(input)
+		elseif self.selectedTab == "interrogateAction" then
+			self.interrogateActionTab:processControls(input)
+		elseif self.selectedTab == "jailAction" then
+			self.jailActionTab:processControls(input)
+		elseif self.selectedTab == "releaseAction" then
+			self.releaseActionTab:processControls(input)
 		end
 	else
 		if controls:isLeft(input) then

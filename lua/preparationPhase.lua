@@ -1,5 +1,6 @@
 require("lua/game/townTab")
 require("lua/game/morgueTab")
+require("lua/game/jailTab")
 
 PreparationPhase = {}
 PreparationPhase.__index = PreparationPhase
@@ -21,11 +22,11 @@ function PreparationPhase:_init()
 
 	self.selections = {
 		["town"]   = UIElement("town", 10, 10, "town", "menu", "town", "morgue", function() game.preparationPhase.selectedTab = "town" end, "buttonBackground", "buttonHighlight", "Town", 10, 5),
-		["morgue"] = UIElement("morgue", 120, 10, "morgue", "save", "town", "party", function() game.preparationPhase.selectedTab = "morgue" end, "buttonBackground", "buttonHighlight", "Morgue", 10, 5),
-		["party"]  = UIElement("party", 230, 10, "party", "begin", "morgue", "party", function() game.preparationPhase.selectedTab = "party" end, "buttonBackground", "buttonHighlight", "Party", 10, 5),
+		["morgue"] = UIElement("morgue", 120, 10, "morgue", "save", "town", "jail", function() game.preparationPhase.selectedTab = "morgue" end, "buttonBackground", "buttonHighlight", "Morgue", 10, 5),
+		["jail"]  = UIElement("jail", 230, 10, "jail", "begin", "morgue", "jail", function() game.preparationPhase.selectedTab = "jail" end, "buttonBackground", "buttonHighlight", "Jail", 10, 5),
 		["menu"]   = UIElement("menu", 5, 560, "town", "menu", "menu", "save", function() toState = mainMenu end, "buttonBackground", "buttonHighlight", "Menu", 10, 5),
 		["save"]   = UIElement("save", 350, 560, "morgue", "save", "menu", "begin", function() game:save() end, "buttonBackground", "buttonHighlight", "Save", 10, 5),
-		["begin"]  = UIElement("begin", 685, 560, "party", "begin", "save", "begin", function() toState = game.actPhase end, "buttonBackground", "buttonHighlight", "Begin", 10, 5),
+		["begin"]  = UIElement("begin", 685, 560, "jail", "begin", "save", "begin", function() toState = game.actPhase end, "buttonBackground", "buttonHighlight", "Begin", 10, 5),
 	}
 	self.selected = self.selections["begin"]
 	self.selectedTab = ""
@@ -33,6 +34,7 @@ function PreparationPhase:_init()
 
 	self.townTab = TownTab()
 	self.morgueTab = MorgueTab()
+	self.jailTab = JailTab()
 end
 
 function PreparationPhase.new(self)
@@ -58,15 +60,18 @@ function PreparationPhase.draw(self)
 		self.townTab:draw()
 	elseif self.selectedTab == "morgue" then
 		self.morgueTab:draw()
-	elseif self.selectedTab == "party" then
-		--
+	elseif self.selectedTab == "jail" then
+		self.jailTab:draw()
 	else
-		if self.lastSelectedTab == "town" then
-			self.townTab:draw()
-			--overlay gray out?
-		elseif self.lastSelectedTab == "morgue" then
-			self.townTab:draw()
-		end
+
+	end
+
+	if self.selectedTab == "" and self.lastSelectedTab == "town" then
+		--self.townTab:draw()
+		--overlay gray out?
+	elseif self.selectedTab == "" and self.lastSelectedTab == "morgue" then
+		--self.townTab:draw()
+	
 	end
 end
 
@@ -80,6 +85,8 @@ function PreparationPhase.processControls(self, input)
 				self.townTab:processControls(input)
 			elseif self.selectedTab == "morgue" then
 				self.morgueTab:processControls(input)
+			elseif self.selectedTab == "jail" then
+				self.jailTab:processControls(input)
 			end
 		end
 	else

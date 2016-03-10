@@ -15,6 +15,7 @@ function Citizen:_init()
 	self.sex = 0
 	self.occupation = ""
 	self.alive = 1
+	self.jailed = 0
 	
 	self.taint = 0
 	self.knows = 0
@@ -33,6 +34,7 @@ function Citizen.generate(self, nameGenerator, faceGenerator, occupationGenerato
 	self.face = faceGenerator:generate(sex)
 
 	self.alive = 1
+	self.jailed = 0
 
 	self.taint = love.math.random(0, 1)
 	self.knows = love.math.random(0, 1)

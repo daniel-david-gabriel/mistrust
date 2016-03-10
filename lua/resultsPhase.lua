@@ -11,10 +11,14 @@ setmetatable(ResultsPhase, {
 })
 
 function ResultsPhase:_init()
+	self.sfx = "menu"
+
 	self.selections = {
-		["okButton"] = "okButton"
+		["okButton"] = UIElement("okButton", 685, 560, "okButton", "okButton", "okButton", "okButton", function() game.resultsPhase.readyToPrepare = true end, "buttonBackground", "buttonHighlight", "OK", 10, 5),
 	}
 	self.selected = self.selections["okButton"]
+
+	self.selectedTab = ""
 
 	self.results = {}
 
@@ -29,23 +33,18 @@ end
 function ResultsPhase.draw(self)
 	screen:drawPhaseBackground()
 
-	--love.graphics.draw(self.okButton, 695, 560)
-	if self.selected == "okButton" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 695, 560, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 695, 560, 0, 2, 2)
-	end
-	love.graphics.print("OK", 705, 560)
-
-	local selectionX = 0
-	local selectionY = 0
-
-	if self.selected == "okButton" then
-		selectionX = 685
-		selectionY = 560
+	for _,uiElement in pairs(self.selections) do
+			if uiElement == self.selected then
+				love.graphics.draw(images:getImage(uiElement.highlight), uiElement.x, uiElement.y)
+			else
+				love.graphics.draw(images:getImage(uiElement.image), uiElement.x, uiElement.y)
+			end
+			love.graphics.print(uiElement.text, uiElement.x + uiElement.textXOffset, uiElement.y + uiElement.textYOffset)
 	end
 
-	screen:drawCursor(selectionX, selectionY)
+	if self.selectedTab == "" then
+		screen:drawCursor(self.selected.x, self.selected.y)
+	end
 
 	love.graphics.setColor(0, 0, 0, 255)
 	local resultString = ""
@@ -62,11 +61,18 @@ function ResultsPhase.draw(self)
 end
 
 function ResultsPhase.processControls(self, input)
-	if controls:isMenu(input) or controls:isConfirm(input) then
-		if self.selected == "okButton" then
-			self.readyToPrepare = true
-		end
+	if controls:isLeft(input) then
+		self.selected = self.selections[self.selected.left]
+	elseif controls:isRight(input) then	
+		self.selected = self.selections[self.selected.right]
+	elseif controls:isUp(input) then
+		self.selected = self.selections[self.selected.up]
+	elseif controls:isDown(input) then
+		self.selected = self.selections[self.selected.down]
+	elseif controls:isConfirm(input) then
+		self.selected.confirm()
 	end
+	soundEffects:playSoundEffect(self.sfx)
 end
 
 function ResultsPhase.keyreleased(self, key )
@@ -79,16 +85,40 @@ end
 
 function ResultsPhase.update(self, dt)
 	if self.readyToPrepare then
-		local livingCitizens = filter(function (value) return value.alive == 1 end, game.town.citizens)
-		local deadCitizens = filter(function (value) return value.alive == 0 end, game.town.citizens)
+		local function getRemainingCitizens(value) return (value.alive == 1 and value.jailed == 0) end
 
-		game.town.citizens = livingCitizens
-		for _,citizen in pairs(deadCitizens) do
-			table.insert(game.town.morgue, citizen)
+		local remainingCitizens = filter(getRemainingCitizens, game.town.citizens)
+		local deadCitizens = filter(function (value) return value.alive == 0 end, game.town.citizens)
+		local jailedCitizens = filter(function (value) return value.jailed == 1 end, game.town.citizens)
+		local freedCitizens = filter(function (value) return value.jailed == 0 end, game.town.jail)
+		local stillJailedCitizens = filter(function (value) return value.jailed == 1 end, game.town.jail)
+
+		for _,citizen in pairs(freedCitizens) do
+			table.insert(remainingCitizens, citizen)
 		end
+		game.town.citizens = remainingCitizens
+		
+		local jail = {}
+		for _,citizen in pairs(stillJailedCitizens) do
+			table.insert(jail, citizen)
+		end
+		for _,citizen in pairs(jailedCitizens) do
+			table.insert(jail, citizen)
+		end
+		game.town.jail = jail
+
+		local morgue = {}
+		for _,citizen in pairs(game.town.morgue) do
+			table.insert(morgue, citizen)
+		end
+		for _,citizen in pairs(deadCitizens) do
+			table.insert(morgue, citizen)
+		end
+		game.town.morgue = morgue
 
 print(table.getn(game.town.citizens))
 print(table.getn(game.town.morgue))
+print(table.getn(game.town.jail))
 
 		self.readyToPrepare = false
 		toState = self.toState
