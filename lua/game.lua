@@ -1,9 +1,11 @@
 require("lua/game/town")
 require("lua/game/player")
+require("lua/menu/uiElement")
 require("lua/preparationPhase")
 require("lua/actPhase")
 require("lua/resultsPhase")
 require("lua/game/phase/gameOver")
+require("lua/game/phase/huntSummary")
 require("lua/save")
 
 Game = {}
@@ -24,6 +26,7 @@ function Game:_init()
 	self.resultsPhase = ResultsPhase()
 	self.resultsPhase.toState = self.preparationPhase
 
+	self.huntSummary = HuntSummary()
 	self.gameOver = GameOver()
 end
 

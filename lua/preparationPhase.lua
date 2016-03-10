@@ -14,22 +14,18 @@ setmetatable(PreparationPhase, {
 })
 
 function PreparationPhase:_init()
+	self.sfx = "menu"
+
 	self.citizenIndex = 1
 	self.rowDisplayed = 1
 
 	self.selections = {
-		["town"]   = {name="town", x=10, y=10, up="town", down="menu", left="town", right="morgue",
-		              confirm=function() game.preparationPhase.selectedTab = "town" end},
-		["morgue"] = {name="morgue", x=120, y=10, up="morgue", down="save", left="town", right="party",
-		              confirm=function() game.preparationPhase.selectedTab = "morgue" end},
-		["party"]  = {name="party", x=230, y=10, up="party", down="begin", left="morgue", right="party",
-		              confirm=function() game.preparationPhase.selectedTab = "party" end},
-		["menu"]   = {name="menu", x=5, y=560, up="town", down="menu", left="menu", right="save",
-					  confirm=function() toState = mainMenu end},
-		["save"]   = {name="save", x=350, y=560, up="morgue", down="save", left="menu", right="begin",
-		              confirm=function() game:save() end},
-		["begin"]  = {name="begin", x=685, y=560, up="party", down="begin", left="save", right="begin",
-		              confirm=function() toState = game.actPhase end},
+		["town"]   = UIElement("town", 10, 10, "town", "menu", "town", "morgue", function() game.preparationPhase.selectedTab = "town" end, "buttonBackground", "buttonHighlight", "Town", 10, 5),
+		["morgue"] = UIElement("morgue", 120, 10, "morgue", "save", "town", "party", function() game.preparationPhase.selectedTab = "morgue" end, "buttonBackground", "buttonHighlight", "Morgue", 10, 5),
+		["party"]  = UIElement("party", 230, 10, "party", "begin", "morgue", "party", function() game.preparationPhase.selectedTab = "party" end, "buttonBackground", "buttonHighlight", "Party", 10, 5),
+		["menu"]   = UIElement("menu", 5, 560, "town", "menu", "menu", "save", function() toState = mainMenu end, "buttonBackground", "buttonHighlight", "Menu", 10, 5),
+		["save"]   = UIElement("save", 350, 560, "morgue", "save", "menu", "begin", function() game:save() end, "buttonBackground", "buttonHighlight", "Save", 10, 5),
+		["begin"]  = UIElement("begin", 685, 560, "party", "begin", "save", "begin", function() toState = game.actPhase end, "buttonBackground", "buttonHighlight", "Begin", 10, 5),
 	}
 	self.selected = self.selections["begin"]
 	self.selectedTab = ""
@@ -47,57 +43,23 @@ function PreparationPhase.draw(self)
 
 	screen:drawPhaseBackground()
 
-	love.graphics.setColor(255, 255, 255, 255)
-
-	if self.selected.name == "menu" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 25, 560, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 25, 560, 0, 2, 2)
+	for _,uiElement in pairs(self.selections) do
+			if uiElement == self.selected then
+				love.graphics.draw(images:getImage(uiElement.highlight), uiElement.x, uiElement.y)
+			else
+				love.graphics.draw(images:getImage(uiElement.image), uiElement.x, uiElement.y)
+			end
+			love.graphics.print(uiElement.text, uiElement.x + uiElement.textXOffset, uiElement.y + uiElement.textYOffset)
 	end
-	love.graphics.print("Menu", 35, 560)
-	if self.selected.name == "save" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 360, 560, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 360, 560, 0, 2, 2)
-	end
-	love.graphics.print("Save", 370, 560)
-	if self.selected.name == "begin" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 695, 560, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 695, 560, 0, 2, 2)
-	end
-	love.graphics.print("Begin", 705, 560)
-
-	
-	if self.selected.name == "town" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 10, 10, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 10, 10, 0, 2, 2)
-	end
-	love.graphics.print("Town", 20, 10)
-	if self.selected.name == "morgue" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 10 + images:getImage("buttonHighlight"):getWidth()*2, 10, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 10 + images:getImage("buttonHighlight"):getWidth()*2, 10, 0, 2, 2)
-	end
-	love.graphics.print("Morgue", 20 + images:getImage("buttonHighlight"):getWidth()*2, 10)
-	if self.selected.name == "party" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 10 + images:getImage("buttonHighlight"):getWidth()*4, 10, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 10 + images:getImage("buttonHighlight"):getWidth()*4, 10, 0, 2, 2)
-	end
-	love.graphics.print("Party", 20 + images:getImage("buttonHighlight"):getWidth()*4, 10)
 
 	if self.selectedTab == "" then
 		screen:drawCursor(self.selected.x, self.selected.y)
-	end
-	
-	if self.selectedTab == "town" then
+	elseif self.selectedTab == "town" then
 		self.townTab:draw()
 	elseif self.selectedTab == "morgue" then
 		self.morgueTab:draw()
 	elseif self.selectedTab == "party" then
-
+		--
 	else
 		if self.lastSelectedTab == "town" then
 			self.townTab:draw()
@@ -132,6 +94,7 @@ function PreparationPhase.processControls(self, input)
 		elseif controls:isConfirm(input) then
 			self.selected.confirm()
 		end
+		soundEffects:playSoundEffect(self.sfx)
 	end
 end
 

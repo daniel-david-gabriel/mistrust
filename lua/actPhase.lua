@@ -1,4 +1,5 @@
 require("lua/game/actions/killActionTab")
+require("lua/game/actions/endHuntAction")
 require("lua/game/actions/canvasAction")
 
 ActPhase = {}
@@ -14,16 +15,19 @@ setmetatable(ActPhase, {
 })
 
 function ActPhase:_init()
+	self.sfx = "menu"
 
 	self.selections = {
-		["back"]         = {name="back", x=5, y=560, up="killAction", down="back", left="back", right="confirm",
-		                    confirm=function() toState = game.preparationPhase end},
-		["confirm"]      = {name="confirm", x=685, y=560, up="killAction", down="confirm", left="back", right="confirm",
-							confirm=function() game.actPhase.readyToExecute = true end},
-		["killAction"]   = {name="killAction", x=25, y=128, up="canvasAction", down="back", left="killAction", right="killAction",
-							confirm=function() game.actPhase.selectedTab = "killAction" end},
-		["canvasAction"] = {name="canvasAction", x=25, y=25, up="canvasAction", down="killAction", left="canvasAction", right="canvasAction",
-							confirm=function() table.insert(game.actPhase.actionsToExecute, CanvasAction()) end}
+		["back"]          = UIElement("back", 5, 560, "endHuntAction", "back", "back", "confirm",
+									  function() toState = game.preparationPhase end, "buttonBackground", "buttonHighlight", "Back", 10, 5),
+		["confirm"]       = UIElement("confirm", 685, 560, "killAction", "confirm", "back", "confirm",
+									  function() game.actPhase.readyToExecute = true end, "buttonBackground", "buttonHighlight", "Confirm", 10, 5),
+		["killAction"]    = UIElement("killAction", 25, 128, "canvasAction", "endHuntAction", "killAction", "killAction",
+									  function() game.actPhase.selectedTab = "killAction" end, "actionBackground", "actionHighlight", "Kill", 50, 40),
+		["canvasAction"]  = UIElement("canvasAction", 25, 25, "canvasAction", "killAction", "canvasAction", "canvasAction",
+									  function() table.insert(game.actPhase.actionsToExecute, CanvasAction()) end, "actionBackground", "actionHighlight", "Canvas Town", 50, 40),
+		["endHuntAction"] = UIElement("endHuntAction", 25, 256, "killAction", "back", "endHuntAction", "endHuntAction",
+									  function() table.insert(game.actPhase.actionsToExecute, EndHuntAction()) end, "actionBackground", "actionHighlight", "End Hunt", 50, 40)
 	}
 	self.selected = self.selections["confirm"]
 
@@ -41,31 +45,18 @@ end
 function ActPhase.draw(self)
 	screen:drawPhaseBackground()
 
-	if self.selected.name == "back" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 25, 560, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 25, 560, 0, 2, 2)
+	for _,uiElement in pairs(self.selections) do
+			if uiElement == self.selected then
+				love.graphics.draw(images:getImage(uiElement.highlight), uiElement.x, uiElement.y)
+			else
+				love.graphics.draw(images:getImage(uiElement.image), uiElement.x, uiElement.y)
+			end
+			love.graphics.print(uiElement.text, uiElement.x + uiElement.textXOffset, uiElement.y + uiElement.textYOffset)
 	end
-	love.graphics.print("Back", 35, 560)
-
-	if self.selected.name == "confirm" then
-		love.graphics.draw(images:getImage("buttonHighlight"), 695, 560, 0, 2, 2)
-	else
-		love.graphics.draw(images:getImage("buttonBackground"), 695, 560, 0, 2, 2)
-	end
-	love.graphics.print("Execute", 705, 560)
-
-	local actionTemplate = love.graphics.newImage("media/menu/actionTemplate.png")
-	love.graphics.draw(actionTemplate, 20, 20, 0, 2, 2)
-	love.graphics.draw(actionTemplate, 20, 20 + actionTemplate:getHeight()*2, 0, 2, 2)
-	love.graphics.print("Canvas", 30, 30)
-	love.graphics.print("Kill", 30, 30 + actionTemplate:getHeight()*2)
 
 	if self.selectedTab == "" then
 		screen:drawCursor(self.selected.x, self.selected.y)
-	end
-
-	if self.selectedTab == "killAction" then
+	elseif self.selectedTab == "killAction" then
 		self.killActionTab:draw()
 	end
 end
@@ -89,6 +80,7 @@ function ActPhase.processControls(self, input)
 		elseif controls:isConfirm(input) then
 			self.selected.confirm()
 		end
+		soundEffects:playSoundEffect(self.sfx)
 	end
 end
 

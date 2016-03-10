@@ -20,10 +20,10 @@ function MainMenu:_init()
 
 	self.credits = Credits()
 
-        self.numberOfClouds = 0
-        self.maxClouds = 1000
+	self.numberOfClouds = 0
+	self.maxClouds = 1000
 	self.cloudAlpha = 0
-        self.cloudPositions = {}
+	self.cloudPositions = {}
 	self.cloudTimer = 0
 
 	self.submenuCount = 5

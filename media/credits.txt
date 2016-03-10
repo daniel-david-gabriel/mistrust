@@ -1,4 +1,4 @@
-Mistrust uses the following assets:
+Mystrust uses the following assets:
 
 http://opengameart.org/content/dark-night-full-moon-background
 License: CC-BY 3.0
@@ -42,10 +42,13 @@ License: CC0
 http://opengameart.org/content/parchement-textures
 License: CC0
 
-
-
 http://opengameart.org/content/fantasy-book
 License: CC0
+
+http://opengameart.org/content/ui-button
+License: CC0
+
+
 
 http://opengameart.org/content/gui-elements
 License: CC0

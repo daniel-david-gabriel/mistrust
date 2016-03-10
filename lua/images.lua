@@ -21,9 +21,13 @@ function Images:_init()
 	self.images["cursor"] = love.graphics.newImage("media/menu/cursor.png")
 	self.images["buttonBackground"] = love.graphics.newImage("media/menu/buttonBackground.png")
 	self.images["buttonHighlight"] = love.graphics.newImage("media/menu/buttonHighlight.png")
+	self.images["actionBackground"] = love.graphics.newImage("media/menu/buttonStock1.png")
+	self.images["actionHighlight"] = love.graphics.newImage("media/menu/buttonStock1h_0.png")
 
+	self.images["darkBackground"] = love.graphics.newImage("media/menu/darkBackground.png")
 	self.images["gameOver"] = love.graphics.newImage("media/menu/bloodyWall.png")
 	self.images["parchment"] = love.graphics.newImage("media/menu/parchment.jpg")
+	self.images["summaryBackground"] = love.graphics.newImage("media/menu/spellbookForFlare.png")
 
 	self.images["suspicious"] = love.graphics.newImage("media/menu/suspicious.png")
 	self.images["marked"] = love.graphics.newImage("media/menu/marked.png")

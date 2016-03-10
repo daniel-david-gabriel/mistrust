@@ -9,13 +9,13 @@ require("lua/game/faceGenerator")
 require("lua/game/occupationGenerator")
 
 function love.load()
-	--myFont = love.graphics.newImageFont("media/core/font.png", " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.,!?\'\"0123456789-+")
 	myFont = love.graphics.newFont("media/core/alagard.ttf", 30)
 	love.graphics.setFont(myFont)
 
 	activeState = LoadingScreen()
 	toState = nil
 
+	--vvv these should probably all go in loading screen
 	screen = Screen()
 
 	mainMenu = MainMenu()
