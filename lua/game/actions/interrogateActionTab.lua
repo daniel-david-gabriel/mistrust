@@ -62,6 +62,7 @@ function InterrogateActionTab.processControls(self, input)
 	elseif controls:isConfirm(input) then
 		table.insert(game.actPhase.actionsToExecute, InterrogateAction(self.citizenSelected))
 		game.actPhase.selectedTab = ""
+		game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1
 	end
 end
 

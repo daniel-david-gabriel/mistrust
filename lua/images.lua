@@ -19,6 +19,8 @@ function Images:_init()
 	self.images["background"] = self:loadBackgroundTiles()
 
 	self.images["cursor"] = love.graphics.newImage("media/menu/cursor.png")
+	self.images["unchecked"] = love.graphics.newImage("media/menu/unchecked.png")
+	self.images["checked"] = love.graphics.newImage("media/menu/checked.png")
 	self.images["buttonBackground"] = love.graphics.newImage("media/menu/buttonBackground.png")
 	self.images["buttonHighlight"] = love.graphics.newImage("media/menu/buttonHighlight.png")
 	self.images["actionBackground"] = love.graphics.newImage("media/menu/buttonStock1.png")

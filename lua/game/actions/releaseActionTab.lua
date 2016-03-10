@@ -64,6 +64,7 @@ print(self.citizenSelected)
 print(game.town.jail[self.citizenSelected].name)
 		table.insert(game.actPhase.actionsToExecute, ReleaseAction(self.citizenSelected))
 		game.actPhase.selectedTab = ""
+		game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1
 	end
 end
 
