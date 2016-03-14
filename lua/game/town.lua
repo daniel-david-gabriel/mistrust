@@ -51,3 +51,28 @@ end
 function Town.load(self, townSize, day)
 
 end
+
+function Town.updateTownList(self, list)
+	if list then
+		self.citizens = list
+	end
+	game.preparationPhase.townTab.list = self.citizens
+	game.actPhase.interrogateActionTab.list = self.citizens
+	game.actPhase.jailActionTab.list = self.citizens
+	game.actPhase.killActionTab.list = self.citizens
+end
+
+function Town.updateMorgueList(self, list)
+	if list then
+		self.morgue = list
+	end
+	game.preparationPhase.morgueTab.list = self.morgue
+end
+
+function Town.updateJailList(self, list)
+	if list then
+		self.jail = list
+	end
+	game.preparationPhase.jailTab.list = self.jail
+	game.actPhase.releaseActionTab.list = self.jail
+end

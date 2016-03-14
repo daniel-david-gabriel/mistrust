@@ -98,7 +98,10 @@ function ResultsPhase.update(self, dt)
 		for _,citizen in pairs(freedCitizens) do
 			table.insert(remainingCitizens, citizen)
 		end
-		game.town.citizens = remainingCitizens
+
+		game.town:updateTownList(remainingCitizens)
+
+		--game.town.citizens = remainingCitizens
 		
 		local jail = {}
 		for _,citizen in pairs(stillJailedCitizens) do
@@ -107,7 +110,8 @@ function ResultsPhase.update(self, dt)
 		for _,citizen in pairs(jailedCitizens) do
 			table.insert(jail, citizen)
 		end
-		game.town.jail = jail
+		game.town:updateJailList(jail)
+		--game.town.jail = jail
 
 		local morgue = {}
 		for _,citizen in pairs(game.town.morgue) do
@@ -116,7 +120,9 @@ function ResultsPhase.update(self, dt)
 		for _,citizen in pairs(deadCitizens) do
 			table.insert(morgue, citizen)
 		end
-		game.town.morgue = morgue
+
+		game.town:updateMorgueList(morgue)
+		--game.town.morgue = morgue
 
 print(table.getn(game.town.citizens))
 print(table.getn(game.town.morgue))

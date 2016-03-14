@@ -1,3 +1,4 @@
+require("lua/game/tab")
 require("lua/game/town")
 require("lua/game/player")
 require("lua/menu/uiElement")
@@ -35,10 +36,18 @@ function Game.new(self)
 	self.town:new()
 
 	self.player = Player()
+
+	self.town:updateTownList()
+	self.town:updateMorgueList()
+	self.town:updateJailList()
 end
 
 function Game.load(self, save)
 	self.town, self.player = save:load()
+
+	self.town:updateTownList()
+	self.town:updateMorgueList()
+	self.town:updateJailList()
 end
 
 function Game.save(self)

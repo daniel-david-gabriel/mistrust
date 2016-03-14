@@ -2,7 +2,7 @@ TownTab = {}
 TownTab.__index = TownTab
 
 setmetatable(TownTab, {
-  __index = TownTab,
+  __index = Tab,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,34 +11,11 @@ setmetatable(TownTab, {
 })
 
 function TownTab:_init()
-	self:resetSelection()
+	Tab._init(self)
 end
 
-function TownTab.new(self)
-
-end
-
-function TownTab.draw(self)	
-	local xOffset = 50
-	local yOffset = 50
-
-	for k,citizen in pairs(game.town.citizens) do
-		if k >= self.rowDisplayed and k < self.rowDisplayed + 3 then
-			screen:drawPortrait(xOffset, yOffset, citizen, alpha)
-			local detailsString = "Name: " .. citizen.name .. " Occupation: " .. citizen.occupation .. "\n"
-			detailsString = detailsString .. "Suspicion Level: " .. citizen.suspicious
-			if citizen.alive == 0 then
-				detailsString = detailsString .. " DEAD"
-			end
-			love.graphics.setColor(0, 0, 0, 255)
-			love.graphics.printf(detailsString, 200, yOffset, love.graphics.getWidth() - 200, "left")
-			yOffset = yOffset + 150
-		end
-	end
-
-	local selectionX = 50
-	local selectionY = 150 * self.rowSelected
-	screen:drawCursor(selectionX, selectionY)
+function TownTab.draw(self)
+	Tab.draw(self)
 end
 
 function TownTab.processControls(self, input)
@@ -73,10 +50,4 @@ end
 
 function TownTab.update(self, dt)
 
-end
-
-function TownTab.resetSelection(self)
-	self.rowDisplayed = 1
-	self.rowSelected = 1
-	self.citizenSelected = 1
 end
