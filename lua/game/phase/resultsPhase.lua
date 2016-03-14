@@ -53,6 +53,8 @@ function ResultsPhase.draw(self)
 	--resultString = resultString .. "Tainted Killed: " .. game.player.taintedKilled .. "\n"
 	--resultString = resultString .. "Agents Killed: " .. game.player.agentsKilled .. "\n"
 	--resultString = resultString .. "Innocent Killed: " .. game.player.innocentsKilled .. "\n\n"
+	resultString = resultString .. "Player Trust: " .. game.player.trust .. "\n"
+	resultString = resultString .. "Riot Threshold: " .. game.player.riot .. "\n"
 	
 	for _,result in pairs(self.results) do
 		resultString = resultString .. result .. "\n"

@@ -11,19 +11,25 @@ setmetatable(InterrogateAction, {
 })
 
 function InterrogateAction:_init(citizen)
-	self.citizenToKill = citizen
+	self.citizenToInterrogate = citizen
 end
 
 function InterrogateAction.act(self)
-	local citizen = game.town.citizens[self.citizenToKill]
-print(citizen.name)
-	if citizen.taint == 1 and citizen.knows == 1 then
-		citizen.suspicious = citizen.suspicious + 20
-	elseif citizen.taint == 1 and citizen.knows ~= 1 then
-		citizen.suspicious = citizen.suspicious + 50
+	local citizen = game.town.citizens[self.citizenToInterrogate]
+
+	if citizen:isAgent() then
+		citizen.suspicious = citizen.suspicious + 10 + love.math.random(0,10)
+		--This will eventually be an opposed check
+		local riotIncrement = love.math.random(0,1)
+		game.player.riot = game.player.riot + riotIncrement
+	elseif citizen:isTainted() then
+		citizen.suspicious = citizen.suspicious + 10 + love.math.random(5,20)
 	else
-		citizen.suspicious = citizen.suspicious + 10
+		citizen.suspicious = citizen.suspicious + love.math.random(0,10)
 	end
+
+	local trustDecrement = love.math.random(0,1)
+	game.player.trust = game.player.trust - trustDecrement
 
 	local resultString = "I interrogated " .. citizen.name .. " today. I have adjusted their suspicion level accordingly."
 	table.insert(game.resultsPhase.results, resultString)

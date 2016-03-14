@@ -16,38 +16,22 @@ end
 
 function KillAction.act(self)
 	local citizen = game.town.citizens[self.citizenToKill]
-print(citizen.name)
-	if citizen.taint == 1 then
+
+	if citizen:isAgent() then
+		game.player.agentsKilled = game.player.agentsKilled + 1
+		--This will eventually be an opposed check
+		local riotIncrement = love.math.random(0,5)
+		game.player.riot = game.player.riot + riotIncrement
+	elseif citizen:isTainted() then
 		game.player.taintedKilled = game.player.taintedKilled + 1
 
-		if citizen.knows == 1 then
-			game.player.agentsKilled = game.player.agentsKilled + 1
-		end
 	else
 		game.player.innocentsKilled = game.player.innocentsKilled + 1
+		local trustDecrement = love.math.random(0,5)
+		game.player.trust = game.player.trust - trustDecrement
 	end
-
-	--table.remove(game.town.citizens, self.citizenToKill)
 	game.town.citizens[self.citizenToKill].alive = 0
 
-	local resultString = "I ordered the execution of " .. citizen.name .. " today. Upon inspection of the corpse, we discovered "
-	
-	if citizen.sex == 0 then
-		resultString = resultString .. "she"
-	else
-		resultString = resultString .. "he"
-	end
-
-	if citizen.taint == 0 then
-		resultString = resultString .. " was only an innocent. May God have mercy on their soul."
-		--game over
-		game.resultsPhase.toState = game.gameOver
-	else
-		if citizen.knows == 0 then
-			resultString = resultString .. " was indeed corrupted by the taint."
-		else
-			resultString = resultString .. " was not only corrupted by the taint, but had embraced it."
-		end
-	end
+	local resultString = "I ordered the execution of " .. citizen.name .. " today. We will have to inspect the body to confirm our suspicions."
 	table.insert(game.resultsPhase.results, resultString)
 end

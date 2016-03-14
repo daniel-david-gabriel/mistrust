@@ -20,10 +20,11 @@ function JailAction.act(self)
 
 
 	local citizen = game.town.citizens[self.citizenToJail]
-print(citizen.name)
 
 	game.town.citizens[self.citizenToJail].jailed = 1
 
+  local trustDecrement = love.math.random(0,1)
+  game.player.trust = game.player.trust - trustDecrement
 
 	local resultString = "I indicted " .. citizen.name .. " today. They have been placed into custody until I choose to release them or I end my hunt."
 	table.insert(game.resultsPhase.results, resultString)
