@@ -28,6 +28,9 @@ function Player:_init()
 	end
 
 	self.actions = 3
+
+	self.trust = 80
+	self.riot = 0
 	
 	self.taintedKilled = 0
 	self.agentsKilled = 0

@@ -11,9 +11,7 @@ setmetatable(JailTab, {
 })
 
 function JailTab:_init()
-	self.rowDisplayed = 1
-	self.rowSelected = 1
-	self.citizenSelected = 1
+	self:resetSelection()
 end
 
 function JailTab.new(self)
@@ -76,3 +74,8 @@ function JailTab.update(self, dt)
 
 end
 
+function JailTab.resetSelection(self)
+	self.rowDisplayed = 1
+	self.rowSelected = 1
+	self.citizenSelected = 1
+end

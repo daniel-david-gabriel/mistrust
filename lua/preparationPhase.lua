@@ -78,6 +78,10 @@ end
 function PreparationPhase.processControls(self, input)
 	if self.selectedTab ~= "" then
 		if controls:isBack(input) then
+			self.townTab:resetSelection()
+			self.morgueTab:resetSelection()
+			self.jailTab:resetSelection()
+
 			self.lastSelectedTab = self.selectedTab
 			self.selectedTab = ""
 		else

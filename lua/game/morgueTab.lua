@@ -11,9 +11,7 @@ setmetatable(MorgueTab, {
 })
 
 function MorgueTab:_init()
-	self.rowDisplayed = 1
-	self.rowSelected = 1
-	self.citizenSelected = 1
+	self:resetSelection()
 end
 
 function MorgueTab.new(self)
@@ -76,3 +74,8 @@ function MorgueTab.update(self, dt)
 
 end
 
+function MorgueTab.resetSelection(self)
+	self.rowDisplayed = 1
+	self.rowSelected = 1
+	self.citizenSelected = 1
+end

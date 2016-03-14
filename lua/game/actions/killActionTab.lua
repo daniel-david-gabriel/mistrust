@@ -23,8 +23,12 @@ function KillActionTab.new(self)
 end
 
 function KillActionTab.draw(self)
-	local xOffset = 50
-	local yOffset = 50
+	local width = 750
+	local height = 550
+	local xOffset = 120
+	local yOffset = 75
+
+	love.graphics.draw(images:getImage("summaryBackground"), 25, 25, 0, width / images:getImage("summaryBackground"):getWidth(), height / images:getImage("summaryBackground"):getHeight())
 
 	for k,citizen in pairs(game.town.citizens) do
 		if citizen.alive == 1 and k >= self.rowDisplayed and k < self.rowDisplayed + 3 then
@@ -32,14 +36,21 @@ function KillActionTab.draw(self)
 			local detailsString = "Name: " .. game.town.citizens[k].name .. " Occupation: " .. game.town.citizens[k].occupation .. "\n"
 			detailsString = detailsString .. "Suspicion Level: " .. game.town.citizens[k].suspicious
 			love.graphics.setColor(0, 0, 0, 255)
-			love.graphics.printf(detailsString, 200, yOffset, love.graphics.getWidth() - 200, "left")
-			yOffset = yOffset + 150
+			love.graphics.printf(detailsString, 250, yOffset, love.graphics.getWidth() - 400, "left")
+			yOffset = yOffset + 140
 		end
 	end
 
-	local selectionX = 50
-	local selectionY = 150 * self.rowSelected
+	local selectionX = 75
+	local selectionY = 140 * self.rowSelected
 	screen:drawCursor(selectionX, selectionY)
+
+	--draw scroll marker
+	local marker = images:getImage("unchecked")
+	local step = (height-110) / table.getn(game.town.citizens)
+	local y = 75 + (step*(self.rowDisplayed-1))
+	love.graphics.draw(marker, width - 70, y)
+
 end
 
 function KillActionTab.processControls(self, input)

@@ -31,6 +31,7 @@ function Save.save(self, town, player)
 	for k,v in pairs(skills) do
 		saveData = saveData .. player.skills[k] .. "\t"
 	end
+	saveData = saveData .. player.trust .. "\t" .. player.riot .. "\t"
 	saveData = saveData .. player.actions .. "\t" .. player.taintedKilled .. "\t" .. player.agentsKilled .. "\t" .. player.innocentsKilled
 	saveData = saveData .. "\r\n"
 
@@ -283,10 +284,13 @@ function Save.load(self)
 					tokenIndex = tokenIndex + 1
 				end
 
-				player.actions = tonumber(lineTokens[tokenIndex])
-				player.taintedKilled = tonumber(lineTokens[tokenIndex+1])
-				player.agentsKilled = tonumber(lineTokens[tokenIndex+2])
-				player.innocentsKilled = tonumber(lineTokens[tokenIndex+3])
+				player.trust = tonumber(lineTokens[tokenIndex])
+				player.riot = tonumber(lineTokens[tokenIndex+1])
+
+				player.actions = tonumber(lineTokens[tokenIndex+2])
+				player.taintedKilled = tonumber(lineTokens[tokenIndex+3])
+				player.agentsKilled = tonumber(lineTokens[tokenIndex+4])
+				player.innocentsKilled = tonumber(lineTokens[tokenIndex+5])
 			end
 		end
 	end

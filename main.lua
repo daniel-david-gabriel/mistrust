@@ -10,6 +10,8 @@ require("lua/game/occupationGenerator")
 
 function love.load()
 	myFont = love.graphics.newFont("media/core/alagard.ttf", 30)
+	local icon = love.image.newImageData("media/icon.png")
+	love.window.setIcon(icon)
 	love.graphics.setFont(myFont)
 
 	activeState = LoadingScreen()

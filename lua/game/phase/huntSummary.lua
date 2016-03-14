@@ -12,6 +12,8 @@ setmetatable(HuntSummary, {
 
 function HuntSummary:_init()
 	self.background = love.graphics.newImage("media/menu/spellbookForFlare.png")
+
+	self.continue = false
 end
 
 function HuntSummary.new(self)
@@ -81,9 +83,8 @@ function HuntSummary.draw(self)
 end
 
 function HuntSummary.processControls(self, input)
-	if controls:isMenu(input) or controls:isConfirm(input) then
-		toState = mainMenu
-		--next stage
+	if controls:isConfirm(input) then
+		self.continue = true
 	end
 end
 
@@ -97,5 +98,10 @@ end
 
 function HuntSummary.update(self, dt)
 	music:playMusic("cutscene")
+
+	if self.continue then
+		game.town:new() --generate a new town
+		toState = game
+	end
 end
 

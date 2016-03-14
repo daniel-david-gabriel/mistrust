@@ -11,16 +11,14 @@ setmetatable(TownTab, {
 })
 
 function TownTab:_init()
-	self.rowDisplayed = 1
-	self.rowSelected = 1
-	self.citizenSelected = 1
+	self:resetSelection()
 end
 
 function TownTab.new(self)
 
 end
 
-function TownTab.draw(self)
+function TownTab.draw(self)	
 	local xOffset = 50
 	local yOffset = 50
 
@@ -77,3 +75,8 @@ function TownTab.update(self, dt)
 
 end
 
+function TownTab.resetSelection(self)
+	self.rowDisplayed = 1
+	self.rowSelected = 1
+	self.citizenSelected = 1
+end
