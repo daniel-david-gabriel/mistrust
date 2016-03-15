@@ -67,6 +67,7 @@ function Town.updateMorgueList(self, list)
 		self.morgue = list
 	end
 	game.preparationPhase.morgueTab.list = self.morgue
+	game.actPhase.inspectCorpseActionTab.list = self.morgue
 end
 
 function Town.updateJailList(self, list)

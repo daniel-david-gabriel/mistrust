@@ -38,7 +38,7 @@ function Save.save(self, town, player)
 	--Save citizens
 	saveData = saveData .. "CITIZENS\r\n"
 	for k,citizen in pairs(town.citizens) do
-		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t" .. citizen.jailed .. "\t"
+		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t" .. citizen.jailed .. "\t" .. citizen.bodyInspected .. "\t"
 		saveData = saveData .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
 		saveData = saveData .. citizen.face.head .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.mouth .. "\t" .. citizen.face.hair .. "\t" .. citizen.face.accessories .. "\t"
 
@@ -56,7 +56,7 @@ function Save.save(self, town, player)
 	--Save morgue
 	saveData = saveData .. "MORGUE\r\n"
 	for k,citizen in pairs(town.morgue) do
-		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t" .. citizen.jailed .. "\t"
+		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t" .. citizen.jailed .. "\t" .. citizen.bodyInspected .. "\t"
 		saveData = saveData .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
 		saveData = saveData .. citizen.face.head .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.mouth .. "\t" .. citizen.face.hair .. "\t" .. citizen.face.accessories .. "\t"
 
@@ -74,7 +74,7 @@ function Save.save(self, town, player)
 	--Save jail
 	saveData = saveData .. "JAIL\r\n"
 	for k,citizen in pairs(town.jail) do
-		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t" .. citizen.jailed .. "\t"
+		saveData = saveData .. citizen.name .. "\t" .. citizen.sex .. "\t" .. citizen.occupation .. "\t" .. citizen.alive .. "\t" .. citizen.jailed .. "\t" .. citizen.bodyInspected .. "\t"
 		saveData = saveData .. citizen.taint .. "\t" .. citizen.knows .. "\t" .. citizen.suspicious .. "\t"
 		saveData = saveData .. citizen.face.head .. "\t" .. citizen.face.eyes .. "\t" .. citizen.face.mouth .. "\t" .. citizen.face.hair .. "\t" .. citizen.face.accessories .. "\t"
 
@@ -189,14 +189,15 @@ function Save.load(self)
 
 				citizen.alive = tonumber(lineTokens[4])
 				citizen.jailed = tonumber(lineTokens[5])
+				citizen.bodyInspected = tonumber(lineTokens[6])
 
-				citizen.taint = tonumber(lineTokens[6])
-				citizen.knows = tonumber(lineTokens[7])
-				citizen.suspicious = tonumber(lineTokens[8])
+				citizen.taint = tonumber(lineTokens[7])
+				citizen.knows = tonumber(lineTokens[8])
+				citizen.suspicious = tonumber(lineTokens[9])
 
-				citizen.face = Face(tonumber(lineTokens[9]), tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]), tonumber(lineTokens[13]))
+				citizen.face = Face(tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]), tonumber(lineTokens[13]), tonumber(lineTokens[14]))
 
-				local tokenIndex = 14
+				local tokenIndex = 15
 				for k,v in pairs(skills) do
 					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1
@@ -215,14 +216,15 @@ function Save.load(self)
 
 				citizen.alive = tonumber(lineTokens[4])
 				citizen.jailed = tonumber(lineTokens[5])
+				citizen.bodyInspected = tonumber(lineTokens[6])
 
-				citizen.taint = tonumber(lineTokens[6])
-				citizen.knows = tonumber(lineTokens[7])
-				citizen.suspicious = tonumber(lineTokens[8])
+				citizen.taint = tonumber(lineTokens[7])
+				citizen.knows = tonumber(lineTokens[8])
+				citizen.suspicious = tonumber(lineTokens[9])
 
-				citizen.face = Face(tonumber(lineTokens[9]), tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]), tonumber(lineTokens[13]))
+				citizen.face = Face(tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]), tonumber(lineTokens[13]), tonumber(lineTokens[14]))
 
-				local tokenIndex = 14
+				local tokenIndex = 15
 				for k,v in pairs(skills) do
 					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1
@@ -241,14 +243,15 @@ function Save.load(self)
 				
 				citizen.alive = tonumber(lineTokens[4])
 				citizen.jailed = tonumber(lineTokens[5])
+				citizen.bodyInspected = tonumber(lineTokens[6])
 
-				citizen.taint = tonumber(lineTokens[6])
-				citizen.knows = tonumber(lineTokens[7])
-				citizen.suspicious = tonumber(lineTokens[8])
+				citizen.taint = tonumber(lineTokens[7])
+				citizen.knows = tonumber(lineTokens[8])
+				citizen.suspicious = tonumber(lineTokens[9])
 
-				citizen.face = Face(tonumber(lineTokens[9]), tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]), tonumber(lineTokens[13]))
+				citizen.face = Face(tonumber(lineTokens[10]), tonumber(lineTokens[11]), tonumber(lineTokens[12]), tonumber(lineTokens[13]), tonumber(lineTokens[14]))
 
-				local tokenIndex = 14
+				local tokenIndex = 15
 				for k,v in pairs(skills) do
 					citizen.skills[k] = tonumber(lineTokens[tokenIndex])
 					tokenIndex = tokenIndex + 1

@@ -16,6 +16,7 @@ function Citizen:_init()
 	self.occupation = ""
 	self.alive = 1
 	self.jailed = 0
+	self.bodyInspected = 0
 	
 	self.taint = 0
 	self.knows = 0
@@ -35,6 +36,7 @@ function Citizen.generate(self, nameGenerator, faceGenerator, occupationGenerato
 
 	self.alive = 1
 	self.jailed = 0
+	self.bodyInspected = 0
 
 	self.taint = love.math.random(0, 1)
 	self.knows = love.math.random(0, 1)

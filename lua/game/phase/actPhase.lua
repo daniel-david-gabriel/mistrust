@@ -4,6 +4,7 @@ require("lua/game/actions/jailActionTab")
 require("lua/game/actions/releaseActionTab")
 require("lua/game/actions/endHuntAction")
 require("lua/game/actions/canvasAction")
+require("lua/game/actions/inspectCorpseActionTab")
 
 ActPhase = {}
 ActPhase.__index = ActPhase
@@ -41,7 +42,7 @@ function ActPhase:_init()
 		["prayerAction"] = UIElement("prayerAction", 25, 450, "endHuntAction", "back", "prayerAction", "inspectCorpseAction",
 									  function() game.actPhase.selectedTab = "" end, "actionBackground", "actionHighlight", "Pray", 50, 40),
 		["inspectCorpseAction"] = UIElement("inspectCorpseAction", 400, 450, "releaseAction", "confirm", "prayerAction", "inspectCorpseAction",
-									  function() game.actPhase.selectedTab = "" end, "actionBackground", "actionHighlight", "Inspect Corpse", 50, 40),
+									  function() game.actPhase.selectedTab = "inspectCorpseAction" end, "actionBackground", "actionHighlight", "Inspect Corpse", 50, 40),
 
 	}
 	self.selected = self.selections["confirm"]
@@ -51,6 +52,7 @@ function ActPhase:_init()
 	self.interrogateActionTab = InterrogateActionTab()
 	self.jailActionTab = JailActionTab()
 	self.releaseActionTab = ReleaseActionTab()
+	self.inspectCorpseActionTab = InspectCorpseActionTab()
 
 	self.readyToExecute = false
 	self.actionsToExecute = {}
@@ -95,6 +97,8 @@ function ActPhase.draw(self)
 		self.jailActionTab:draw()
 	elseif self.selectedTab == "releaseAction" then
 		self.releaseActionTab:draw()
+	elseif self.selectedTab == "inspectCorpseAction" then
+		self.inspectCorpseActionTab:draw()
 	end
 end
 
@@ -110,6 +114,8 @@ function ActPhase.processControls(self, input)
 			self.jailActionTab:processControls(input)
 		elseif self.selectedTab == "releaseAction" then
 			self.releaseActionTab:processControls(input)
+		elseif self.selectedTab == "inspectCorpseAction" then
+			self.inspectCorpseActionTab:processControls(input)
 		end
 	else
 		if controls:isLeft(input) then
