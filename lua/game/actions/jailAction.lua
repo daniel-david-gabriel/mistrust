@@ -2,7 +2,7 @@ JailAction = {}
 JailAction.__index = JailAction
 
 setmetatable(JailAction, {
-  __index = JailAction,
+  __index = Action,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,6 +11,7 @@ setmetatable(JailAction, {
 })
 
 function JailAction:_init(citizen)
+    Action._init(self, 1)
 	self.citizenToJail = citizen
 end
 

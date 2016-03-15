@@ -2,7 +2,7 @@ CanvasAction = {}
 CanvasAction.__index = CanvasAction
 
 setmetatable(CanvasAction, {
-  __index = CanvasAction,
+  __index = Action,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,6 +11,7 @@ setmetatable(CanvasAction, {
 })
 
 function CanvasAction:_init()
+	Action._init(self, 1)
 end
 
 function CanvasAction.act(self)

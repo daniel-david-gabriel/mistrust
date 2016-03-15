@@ -38,9 +38,13 @@ function JailActionTab.processControls(self, input)
 			self.citizenSelected = self.citizenSelected + 1
 		end
 	elseif controls:isConfirm(input) then
-		table.insert(game.actPhase.actionsToExecute, JailAction(self.citizenSelected))
-		game.actPhase.selectedTab = ""
-		game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1
+		local jailAction = JailAction(self.citizenSelected)
+		if game.actPhase:canAddAction(jailAction) then
+			game.actPhase:addAction(jailAction)
+			game.actPhase.selectedTab = ""
+		else
+			--error?
+		end
 	end
 end
 

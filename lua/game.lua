@@ -1,6 +1,7 @@
 require("lua/game/tab")
 require("lua/game/town")
 require("lua/game/player")
+require("lua/game/actions/action")
 require("lua/menu/uiElement")
 require("lua/game/phase/preparationPhase")
 require("lua/game/phase/actPhase")

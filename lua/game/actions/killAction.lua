@@ -2,7 +2,7 @@ KillAction = {}
 KillAction.__index = KillAction
 
 setmetatable(KillAction, {
-  __index = KillAction,
+  __index = Action,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,6 +11,7 @@ setmetatable(KillAction, {
 })
 
 function KillAction:_init(citizen)
+	Action._init(self, 2)
 	self.citizenToKill = citizen
 end
 

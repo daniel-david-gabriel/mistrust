@@ -2,7 +2,7 @@ InterrogateAction = {}
 InterrogateAction.__index = InterrogateAction
 
 setmetatable(InterrogateAction, {
-  __index = InterrogateAction,
+  __index = Action,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,6 +11,7 @@ setmetatable(InterrogateAction, {
 })
 
 function InterrogateAction:_init(citizen)
+	Action._init(self, 1)
 	self.citizenToInterrogate = citizen
 end
 

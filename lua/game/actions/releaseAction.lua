@@ -2,7 +2,7 @@ ReleaseAction = {}
 ReleaseAction.__index = ReleaseAction
 
 setmetatable(ReleaseAction, {
-  __index = ReleaseAction,
+  __index = Action,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -11,6 +11,7 @@ setmetatable(ReleaseAction, {
 })
 
 function ReleaseAction:_init(citizen)
+    Action._init(self, 1)
 	self.citizenToRelease = citizen
 end
 

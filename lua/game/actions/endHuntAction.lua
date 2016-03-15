@@ -2,7 +2,7 @@ EndHuntAction = {}
 EndHuntAction.__index = EndHuntAction
 
 setmetatable(EndHuntAction, {
-  __index = EndHuntAction,
+  __index = Action,
   __call = function (cls, ...)
     local self = setmetatable({}, cls)
     self:_init(...)
@@ -10,8 +10,8 @@ setmetatable(EndHuntAction, {
   end,
 })
 
-function EndHuntAction:_init(citizen)
-	self.citizenToKill = citizen
+function EndHuntAction:_init()
+  Action._init(self, game.player.actions)
 end
 
 function EndHuntAction.act(self)

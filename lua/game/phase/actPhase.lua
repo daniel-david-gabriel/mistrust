@@ -21,23 +21,27 @@ function ActPhase:_init()
 	self.sfx = "menu"
 
 	self.selections = {
-		["back"]          = UIElement("back", 5, 560, "endHuntAction", "back", "back", "confirm",
+		["back"]          = UIElement("back", 5, 560, "prayerAction", "back", "back", "confirm",
 									  function() toState = game.preparationPhase end, "buttonBackground", "buttonHighlight", "Back", 10, 5),
-		["confirm"]       = UIElement("confirm", 685, 560, "releaseAction", "confirm", "back", "confirm",
+		["confirm"]       = UIElement("confirm", 685, 560, "inspectCorpseAction", "confirm", "back", "confirm",
 									  function() game.actPhase.readyToExecute = true end, "buttonBackground", "buttonHighlight", "Confirm", 10, 5),
-		["killAction"]    = UIElement("killAction", 25, 176, "killAction", "canvasAction", "killAction", "interrogateAction",
+		["killAction"]    = UIElement("killAction", 25, 150, "killAction", "canvasAction", "killAction", "interrogateAction",
 									  function() game.actPhase.selectedTab = "killAction" end, "actionBackground", "actionHighlight", "Kill", 50, 40),
-		["canvasAction"]  = UIElement("canvasAction", 25, 276, "killAction", "endHuntAction", "canvasAction", "jailAction",
-									  function() table.insert(game.actPhase.actionsToExecute, CanvasAction()) game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1
- end, "actionBackground", "actionHighlight", "Canvas Town", 50, 40),
-		["endHuntAction"] = UIElement("endHuntAction", 25, 376, "canvasAction", "back", "endHuntAction", "releaseAction",
-									  function() table.insert(game.actPhase.actionsToExecute, EndHuntAction()) game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1 end, "actionBackground", "actionHighlight", "End Hunt", 50, 40),
-		["interrogateAction"] = UIElement("interrogateAction", 400, 176, "interrogateAction", "jailAction", "killAction", "interrogateAction",
+		["canvasAction"]  = UIElement("canvasAction", 25, 250, "killAction", "endHuntAction", "canvasAction", "jailAction",
+									  function() local canvasAction = CanvasAction() if game.actPhase:canAddAction(canvasAction) then game.actPhase:addAction(canvasAction)	else end end, "actionBackground", "actionHighlight", "Canvas Town", 50, 40),
+		["endHuntAction"] = UIElement("endHuntAction", 25, 350, "canvasAction", "prayerAction", "endHuntAction", "releaseAction",
+									  function() local endHuntAction = EndHuntAction() if game.actPhase:canAddAction(endHuntAction) then game.actPhase:addAction(endHuntAction)	else end end, "actionBackground", "actionHighlight", "End Hunt", 50, 40),
+		["interrogateAction"] = UIElement("interrogateAction", 400, 150, "interrogateAction", "jailAction", "killAction", "interrogateAction",
 									  function() game.actPhase.selectedTab = "interrogateAction" end, "actionBackground", "actionHighlight", "Interrogate", 50, 40),
-		["jailAction"] = UIElement("jailAction", 400, 276, "interrogateAction", "releaseAction", "canvasAction", "jailAction",
+		["jailAction"] = UIElement("jailAction", 400, 250, "interrogateAction", "releaseAction", "canvasAction", "jailAction",
 									  function() game.actPhase.selectedTab = "jailAction" end, "actionBackground", "actionHighlight", "Indict", 50, 40),
-		["releaseAction"] = UIElement("releaseAction", 400, 376, "jailAction", "confirm", "endHuntAction", "releaseAction",
+		["releaseAction"] = UIElement("releaseAction", 400, 350, "jailAction", "inspectCorpseAction", "endHuntAction", "releaseAction",
 									  function() game.actPhase.selectedTab = "releaseAction" end, "actionBackground", "actionHighlight", "Release", 50, 40),
+
+		["prayerAction"] = UIElement("prayerAction", 25, 450, "endHuntAction", "back", "prayerAction", "inspectCorpseAction",
+									  function() game.actPhase.selectedTab = "" end, "actionBackground", "actionHighlight", "Pray", 50, 40),
+		["inspectCorpseAction"] = UIElement("inspectCorpseAction", 400, 450, "releaseAction", "confirm", "prayerAction", "inspectCorpseAction",
+									  function() game.actPhase.selectedTab = "" end, "actionBackground", "actionHighlight", "Inspect Corpse", 50, 40),
 
 	}
 	self.selected = self.selections["confirm"]
@@ -117,14 +121,16 @@ function ActPhase.processControls(self, input)
 		elseif controls:isDown(input) then
 			self.selected = self.selections[self.selected.down]
 		elseif controls:isConfirm(input) then
-			if self.selected.name == "back" or self.selected.name == "confirm" or self.actionsTaken < game.player.actions then
+			if self.selected.name == "back" or self.selected.name == "confirm" then
+				self.selected.confirm()
+			elseif self.selected.cost <= game.player.actions - self.actionsTaken then
 				self.selected.confirm()
 			else
 				--play error sound?
 			end
 		elseif controls:isBack(input) then
-			table.remove(self.actionsToExecute)
-			self.actionsTaken = self.actionsTaken - 1
+			local action = table.remove(self.actionsToExecute)
+			self.actionsTaken = self.actionsTaken - action.cost
 			-- play remove sound?
 		end
 		soundEffects:playSoundEffect(self.sfx)
@@ -153,4 +159,13 @@ function ActPhase.update(self, dt)
 		self.actionsToExecute = {}
 		self.actionsTaken = 0
 	end
+end
+
+function ActPhase.canAddAction(self, action)
+	return action.cost <= game.player.actions - self.actionsTaken
+end
+
+function ActPhase.addAction(self, action)
+	table.insert(self.actionsToExecute, action)
+	self.actionsTaken = self.actionsTaken + action.cost
 end

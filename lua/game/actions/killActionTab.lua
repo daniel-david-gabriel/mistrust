@@ -38,9 +38,13 @@ function KillActionTab.processControls(self, input)
 			self.citizenSelected = self.citizenSelected + 1
 		end
 	elseif controls:isConfirm(input) then
-		table.insert(game.actPhase.actionsToExecute, KillAction(self.citizenSelected))
-		game.actPhase.selectedTab = ""
-		game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1
+		local killAction = KillAction(self.citizenSelected)
+		if game.actPhase:canAddAction(killAction) then
+			game.actPhase:addAction(killAction)
+			game.actPhase.selectedTab = ""
+		else
+			--error?
+		end
 	end
 end
 

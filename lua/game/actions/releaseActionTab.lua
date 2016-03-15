@@ -38,11 +38,13 @@ function ReleaseActionTab.processControls(self, input)
 			self.citizenSelected = self.citizenSelected + 1
 		end
 	elseif controls:isConfirm(input) then
-print(self.citizenSelected)
-print(game.town.jail[self.citizenSelected].name)
-		table.insert(game.actPhase.actionsToExecute, ReleaseAction(self.citizenSelected))
-		game.actPhase.selectedTab = ""
-		game.actPhase.actionsTaken = game.actPhase.actionsTaken + 1
+		local releaseAction = ReleaseAction(self.citizenSelected)
+		if game.actPhase:canAddAction(releaseAction) then
+			game.actPhase:addAction(releaseAction)
+			game.actPhase.selectedTab = ""
+		else
+			--error?
+		end
 	end
 end
 

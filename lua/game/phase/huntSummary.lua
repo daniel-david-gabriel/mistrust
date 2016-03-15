@@ -100,7 +100,12 @@ function HuntSummary.update(self, dt)
 	music:playMusic("cutscene")
 
 	if self.continue then
+		self.continue = false
+
 		game.town:new() --generate a new town
+		game.town:updateTownList()
+		game.town:updateMorgueList()
+		game.town:updateJailList()
 		toState = game
 	end
 end

@@ -10,7 +10,7 @@ setmetatable(UIElement, {
   end,
 })
 
-function UIElement:_init(name, x, y, up, down, left, right, confirm, image, highlight, text, textXOffset, textYOffset)
+function UIElement:_init(name, x, y, up, down, left, right, confirm, image, highlight, text, textXOffset, textYOffset, cost)
 	self.name = name
 	
 	self.x = x
@@ -29,4 +29,10 @@ function UIElement:_init(name, x, y, up, down, left, right, confirm, image, high
 	self.text = text
 	self.textXOffset = textXOffset
 	self.textYOffset = textYOffset
+
+	if cost then
+		self.cost = cost
+	else
+		self.cost = 0
+	end
 end
