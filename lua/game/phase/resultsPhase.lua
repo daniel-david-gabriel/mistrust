@@ -14,13 +14,14 @@ function ResultsPhase:_init()
 	self.sfx = "menu"
 
 	self.selections = {
-		["okButton"] = UIElement("okButton", 685, 560, "okButton", "okButton", "okButton", "okButton", function() game.resultsPhase.readyToPrepare = true end, "buttonBackground", "buttonHighlight", "OK", 10, 5),
+		["okButton"] = UIElement("okButton", 685, 560, "okButton", "okButton", "okButton", "okButton", function () ResultsPhase.confirm(game.resultsPhase) end, "buttonBackground", "buttonHighlight", "OK", 10, 5),
 	}
 	self.selected = self.selections["okButton"]
 
 	self.selectedTab = ""
 
 	self.results = {}
+	self.resultShown = 0
 
 	self.readyToPrepare = false
 	self.toState = nil
@@ -47,18 +48,7 @@ function ResultsPhase.draw(self)
 	end
 
 	love.graphics.setColor(0, 0, 0, 255)
-	local resultString = ""
-	resultString = resultString .. "Results of Day: " .. game.town.day - 1 .. "\n"
-	resultString = resultString .. "Town of: " .. game.town.name .. ", Population: " .. table.getn(game.town.citizens) .. "\n\n"
-	--resultString = resultString .. "Tainted Killed: " .. game.player.taintedKilled .. "\n"
-	--resultString = resultString .. "Agents Killed: " .. game.player.agentsKilled .. "\n"
-	--resultString = resultString .. "Innocent Killed: " .. game.player.innocentsKilled .. "\n\n"
-	resultString = resultString .. "Player Trust: " .. game.player.trust .. "\n"
-	resultString = resultString .. "Riot Threshold: " .. game.player.riot .. "\n"
-	
-	for _,result in pairs(self.results) do
-		resultString = resultString .. result .. "\n"
-	end
+	local resultString = self:generateResultText()
 	love.graphics.printf(resultString, 50, 30, 700, "left")
 end
 
@@ -132,10 +122,35 @@ print(table.getn(game.town.jail))
 		toState = self.toState
 		self.toState = game.preparationPhase
 		self.results = {}
+		self.resultShown = 0
 	end
 end
 
-function ResultsPhase.loadMaps(self)
+function ResultsPhase.generateResultText(self)
+	local resultString = ""
+	resultString = resultString .. "Results of Day: " .. game.town.day - 1 .. "\n"
+	resultString = resultString .. "Town of: " .. game.town.name .. ", Population: " .. table.getn(game.town.citizens) .. "\n\n"
+	--resultString = resultString .. "Tainted Killed: " .. game.player.taintedKilled .. "\n"
+	--resultString = resultString .. "Agents Killed: " .. game.player.agentsKilled .. "\n"
+	--resultString = resultString .. "Innocent Killed: " .. game.player.innocentsKilled .. "\n\n"
+	resultString = resultString .. "Player Trust: " .. game.player.trust .. "\n"
+	resultString = resultString .. "Riot Threshold: " .. game.player.riot .. "\n"
 	
+	for i,result in pairs(self.results) do
+		if i <= self.resultShown then
+			resultString = resultString .. result.text .. "\n"
+		end
+	end
+	return resultString
 end
 
+function ResultsPhase.confirm(self)
+	if self.resultShown < table.getn(self.results) then
+		self.resultShown = self.resultShown + 1
+		game.player.trust = game.player.trust + self.results[self.resultShown].trust
+		game.player.riot = game.player.riot + self.results[self.resultShown].riot
+
+	else
+		self.readyToPrepare = true
+	end
+end

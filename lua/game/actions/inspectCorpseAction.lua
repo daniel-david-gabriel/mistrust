@@ -17,23 +17,24 @@ end
 
 function InspectCorpseAction.act(self)
 	local citizen = game.town.morgue[self.citizenToInspect]
-
+	local riotChange = 0
+	local trustChange = 0
 	citizen.bodyInspected = 1
 
 	if citizen:isAgent() then
-		local riotDecrement = love.math.random(1,5)
-		game.player.riot = game.player.riot - riotDecrement
-		local trustIncrement = love.math.random(1,5)
-		game.player.trust = game.player.trust + trustIncrement
+		riotChange = riotChange - love.math.random(1,5)
+		--game.player.riot = game.player.riot - riotDecrement
+		trustChange = trustChange + love.math.random(1,5)
+		--game.player.trust = game.player.trust + trustIncrement
 	elseif citizen:isTainted() then
-		local riotDecrement = love.math.random(1,5)
-		game.player.riot = game.player.riot - riotDecrement
+		riotChange = riotChange - love.math.random(1,5)
+		--game.player.riot = game.player.riot - riotDecrement
 	else
-		local trustDecrement = love.math.random(0,5)
-		game.player.trust = game.player.trust - trustDecrement
+		trustChange = trustChange - love.math.random(0,5)
+		--game.player.trust = game.player.trust - trustDecrement
 	end
 
-	local resultString = "I inspected the body of " .. citizen.name .. " today."
-	--Put different results for innocent/tainted/agent
-	table.insert(game.resultsPhase.results, resultString)
+	local resultString = "I inspected the body of " .. citizen.name .. " today." --Put different results for innocent/tainted/agent
+	local result = Result(trustChange, riotChange, resultString)
+	table.insert(game.resultsPhase.results, result)
 end

@@ -19,5 +19,6 @@ function EndHuntAction.act(self)
 	game.resultsPhase.toState = game.huntSummary
 
 	local resultString = "I have decided to end my hun in " .. game.town.name .. ". I should await the results of my report to the church."
-	table.insert(game.resultsPhase.results, resultString)
+	local result = Result(0, 0, resultString)
+  table.insert(game.resultsPhase.results, result)
 end

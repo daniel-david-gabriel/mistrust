@@ -16,15 +16,17 @@ end
 
 function CanvasAction.act(self)
 	local suspiciousIndividuals = 0
+	local riotChange = 0
+	local trustChange = 0
 	for _,citizen in pairs(game.town.citizens) do
 		if citizen:isAgent() then
 			citizen.suspicious = citizen.suspicious + love.math.random(1,5)
-			local riotIncrement = love.math.random(0,1)
-			game.player.riot = game.player.riot + riotIncrement
+			riotChange = riotChange + love.math.random(0,1)
+			--game.player.riot = game.player.riot + riotIncrement
 		elseif citizen:isTainted() then
 			citizen.suspicious = citizen.suspicious + love.math.random(1,15)
-			local trustDecrement = love.math.random(0,1)
-			game.player.trust = game.player.trust - trustDecrement
+			trustChange = trustChange - love.math.random(0,1)
+			--game.player.trust = game.player.trust - trustDecrement
 			suspiciousIndividuals = suspiciousIndividuals + 1
 		else
 			citizen.suspicious = citizen.suspicious + love.math.random(1,5)
@@ -39,5 +41,7 @@ function CanvasAction.act(self)
 	else
 		resultString = resultString .. "I canvased the town and encountered no suspicious individuals. Either the town is clean, or the agents remain hidden."
 	end
-	table.insert(game.resultsPhase.results, resultString)
+
+	local result = Result(trustChange, riotChange, resultString)
+	table.insert(game.resultsPhase.results, result)
 end

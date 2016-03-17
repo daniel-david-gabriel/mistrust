@@ -17,14 +17,16 @@ end
 
 function ReleaseAction.act(self)
 	local citizen = game.town.jail[self.citizenToRelease]
-print(citizen.name)
+  local trustChange = 0
+  local riotChange = 0
 
-		game.town.jail[self.citizenToRelease].jailed = 0
+	game.town.jail[self.citizenToRelease].jailed = 0
 
-  local trustIncrement = 1
-  game.player.trust = game.player.trust + trustIncrement
+  trustChange = trustChange + 1
+  --game.player.trust = game.player.trust + trustIncrement
 
 
 	local resultString = "I released " .. citizen.name .. " today. They have been returned to the town unharmed."
-	table.insert(game.resultsPhase.results, resultString)
+	local result = Result(trustChange, riotChange, resultString)
+  table.insert(game.resultsPhase.results, result)
 end
