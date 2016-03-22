@@ -22,23 +22,7 @@ function InspectCorpseActionTab.draw(self)
 end
 
 function InspectCorpseActionTab.processControls(self, input)
-	if controls:isUp(input) then
-		if self.rowDisplayed > 1 and self.rowSelected == 1 then
-			self.rowDisplayed = self.rowDisplayed - 1
-			self.citizenSelected = self.citizenSelected - 1
-		elseif self.rowSelected > 1 then
-			self.rowSelected = self.rowSelected - 1
-			self.citizenSelected = self.citizenSelected - 1
-		end
-	elseif controls:isDown(input) then
-		if self.citizenSelected < table.getn(game.town.citizens) and self.rowSelected == 3 then
-			self.rowDisplayed = self.rowDisplayed + 1
-			self.citizenSelected = self.citizenSelected + 1
-		elseif self.rowSelected < 3 then
-			self.rowSelected = self.rowSelected + 1
-			self.citizenSelected = self.citizenSelected + 1
-		end
-	elseif controls:isConfirm(input) then --disallow if corpse already inspected
+	if controls:isConfirm(input) then
 		local inspectCorpseAction = InspectCorpseAction(self.citizenSelected)
 		if game.actPhase:canAddAction(inspectCorpseAction) then
 			game.actPhase:addAction(inspectCorpseAction)
@@ -46,6 +30,8 @@ function InspectCorpseActionTab.processControls(self, input)
 		else
 			--error?
 		end
+	else
+		Tab.processControls(self, input)
 	end
 end
 

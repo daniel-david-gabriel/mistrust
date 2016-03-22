@@ -19,6 +19,9 @@ function InspectCorpseAction.act(self)
 	local citizen = game.town.morgue[self.citizenToInspect]
 	local riotChange = 0
 	local trustChange = 0
+
+	--If it's been inspected, do nothing?
+
 	citizen.bodyInspected = 1
 
 	if citizen:isAgent() then

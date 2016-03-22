@@ -49,6 +49,26 @@ function Tab.draw(self)
 	love.graphics.draw(marker, width - 70, y)
 end
 
+function Tab.processControls(self, input)
+	if controls:isUp(input) then
+		if self.rowDisplayed > 1 and self.rowSelected == 1 then
+			self.rowDisplayed = self.rowDisplayed - 1
+			self.citizenSelected = self.citizenSelected - 1
+		elseif self.rowSelected > 1 then
+			self.rowSelected = self.rowSelected - 1
+			self.citizenSelected = self.citizenSelected - 1
+		end
+	elseif controls:isDown(input) then
+		if self.citizenSelected < table.getn(self.list) and self.rowSelected == 3 then
+			self.rowDisplayed = self.rowDisplayed + 1
+			self.citizenSelected = self.citizenSelected + 1
+		elseif self.rowSelected < 3 then
+			self.rowSelected = self.rowSelected + 1
+			self.citizenSelected = self.citizenSelected + 1
+		end
+	end
+end
+
 function Tab.resetSelection(self)
 	self.rowDisplayed = 1
 	self.rowSelected = 1

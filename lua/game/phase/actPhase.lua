@@ -5,6 +5,7 @@ require("lua/game/actions/releaseActionTab")
 require("lua/game/actions/endHuntAction")
 require("lua/game/actions/canvasAction")
 require("lua/game/actions/inspectCorpseActionTab")
+require("lua/game/actions/prayerActionTab")
 
 ActPhase = {}
 ActPhase.__index = ActPhase
@@ -40,7 +41,7 @@ function ActPhase:_init()
 									  function() game.actPhase.selectedTab = "releaseAction" end, "actionBackground", "actionHighlight", "Release", 50, 40),
 
 		["prayerAction"] = UIElement("prayerAction", 25, 450, "endHuntAction", "back", "prayerAction", "inspectCorpseAction",
-									  function() game.actPhase.selectedTab = "" end, "actionBackground", "actionHighlight", "Pray", 50, 40),
+									  function() game.actPhase.selectedTab = "prayerAction" end, "actionBackground", "actionHighlight", "Pray", 50, 40),
 		["inspectCorpseAction"] = UIElement("inspectCorpseAction", 400, 450, "releaseAction", "confirm", "prayerAction", "inspectCorpseAction",
 									  function() game.actPhase.selectedTab = "inspectCorpseAction" end, "actionBackground", "actionHighlight", "Inspect Corpse", 50, 40),
 
@@ -53,6 +54,7 @@ function ActPhase:_init()
 	self.jailActionTab = JailActionTab()
 	self.releaseActionTab = ReleaseActionTab()
 	self.inspectCorpseActionTab = InspectCorpseActionTab()
+	self.prayerActionTab = PrayerActionTab()
 
 	self.readyToExecute = false
 	self.actionsToExecute = {}
@@ -99,6 +101,8 @@ function ActPhase.draw(self)
 		self.releaseActionTab:draw()
 	elseif self.selectedTab == "inspectCorpseAction" then
 		self.inspectCorpseActionTab:draw()
+	elseif self.selectedTab == "prayerAction" then
+		self.prayerActionTab:draw()
 	end
 end
 
@@ -116,6 +120,8 @@ function ActPhase.processControls(self, input)
 			self.releaseActionTab:processControls(input)
 		elseif self.selectedTab == "inspectCorpseAction" then
 			self.inspectCorpseActionTab:processControls(input)
+		elseif self.selectedTab == "prayerAction" then
+			self.prayerActionTab:processControls(input)
 		end
 	else
 		if controls:isLeft(input) then
@@ -127,13 +133,14 @@ function ActPhase.processControls(self, input)
 		elseif controls:isDown(input) then
 			self.selected = self.selections[self.selected.down]
 		elseif controls:isConfirm(input) then
-			if self.selected.name == "back" or self.selected.name == "confirm" then
+			--[[if self.selected.name == "back" or self.selected.name == "confirm" then
 				self.selected.confirm()
 			elseif self.selected.cost <= game.player.actions - self.actionsTaken then
 				self.selected.confirm()
 			else
 				--play error sound?
-			end
+			end]]--
+			self.selected.confirm()
 		elseif controls:isBack(input) then
 			local action = table.remove(self.actionsToExecute)
 			self.actionsTaken = self.actionsTaken - action.cost

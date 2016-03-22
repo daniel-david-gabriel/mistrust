@@ -21,23 +21,7 @@ function ReleaseActionTab.draw(self)
 end
 
 function ReleaseActionTab.processControls(self, input)
-	if controls:isUp(input) then
-		if self.rowDisplayed > 1 and self.rowSelected == 1 then
-			self.rowDisplayed = self.rowDisplayed - 1
-			self.citizenSelected = self.citizenSelected - 1
-		elseif self.rowSelected > 1 then
-			self.rowSelected = self.rowSelected - 1
-			self.citizenSelected = self.citizenSelected - 1
-		end
-	elseif controls:isDown(input) then
-		if self.citizenSelected < table.getn(game.town.citizens) and self.rowSelected == 3 then
-			self.rowDisplayed = self.rowDisplayed + 1
-			self.citizenSelected = self.citizenSelected + 1
-		elseif self.rowSelected < 3 then
-			self.rowSelected = self.rowSelected + 1
-			self.citizenSelected = self.citizenSelected + 1
-		end
-	elseif controls:isConfirm(input) then
+	if controls:isConfirm(input) then
 		local releaseAction = ReleaseAction(self.citizenSelected)
 		if game.actPhase:canAddAction(releaseAction) then
 			game.actPhase:addAction(releaseAction)
@@ -45,6 +29,8 @@ function ReleaseActionTab.processControls(self, input)
 		else
 			--error?
 		end
+	else
+		Tab.processControls(self, input)
 	end
 end
 
