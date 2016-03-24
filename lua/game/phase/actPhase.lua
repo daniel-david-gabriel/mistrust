@@ -143,7 +143,9 @@ function ActPhase.processControls(self, input)
 			self.selected.confirm()
 		elseif controls:isBack(input) then
 			local action = table.remove(self.actionsToExecute)
-			self.actionsTaken = self.actionsTaken - action.cost
+			if action then
+				self.actionsTaken = self.actionsTaken - action.cost
+			end
 			-- play remove sound?
 		end
 		soundEffects:playSoundEffect(self.sfx)
