@@ -1,11 +1,12 @@
-require("lua/game/actions/killActionTab")
-require("lua/game/actions/interrogateActionTab")
-require("lua/game/actions/jailActionTab")
-require("lua/game/actions/releaseActionTab")
 require("lua/game/actions/endHuntAction")
 require("lua/game/actions/canvasAction")
-require("lua/game/actions/inspectCorpseActionTab")
-require("lua/game/actions/prayerActionTab")
+
+require("lua/view/actions/killActionTab")
+require("lua/view/actions/interrogateActionTab")
+require("lua/view/actions/jailActionTab")
+require("lua/view/actions/releaseActionTab")
+require("lua/view/actions/inspectCorpseActionTab")
+require("lua/view/actions/prayerActionTab")
 
 ActPhase = {}
 ActPhase.__index = ActPhase

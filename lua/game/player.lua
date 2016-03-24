@@ -1,4 +1,4 @@
-require("lua/game/citizen")
+require("lua/game/citizens/citizen")
 
 Player = {}
 Player.__index = Player

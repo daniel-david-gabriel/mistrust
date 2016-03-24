@@ -1,12 +1,14 @@
-require("lua/controls")
-require("lua/screen")
-require("lua/mainMenu")
-require("lua/loadingScreen")
 require("lua/game")
 require("lua/options")
-require("lua/game/nameGenerator")
-require("lua/game/faceGenerator")
-require("lua/game/occupationGenerator")
+require("lua/controls")
+
+require("lua/game/citizens/nameGenerator")
+require("lua/game/citizens/faceGenerator")
+require("lua/game/citizens/occupationGenerator")
+
+require("lua/view/screen")
+require("lua/view/menu/mainMenu")
+require("lua/view/menu/loadingScreen")
 
 function love.load()
 	myFont = love.graphics.newFont("media/core/alagard.ttf", 30)

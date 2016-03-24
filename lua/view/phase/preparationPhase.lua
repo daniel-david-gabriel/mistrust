@@ -1,6 +1,6 @@
-require("lua/game/townTab")
-require("lua/game/morgueTab")
-require("lua/game/jailTab")
+require("lua/view/phase/townTab")
+require("lua/view/phase/morgueTab")
+require("lua/view/phase/jailTab")
 
 PreparationPhase = {}
 PreparationPhase.__index = PreparationPhase

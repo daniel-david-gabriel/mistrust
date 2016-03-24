@@ -1,5 +1,5 @@
 require("lua/game/quest")
-require("lua/game/citizen")
+require("lua/game/citizens/citizen")
 
 Town = {}
 Town.__index = Town

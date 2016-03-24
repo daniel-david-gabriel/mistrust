@@ -1,4 +1,4 @@
-require("lua/game/face")
+require("lua/game/citizens/face")
 
 FaceGenerator = {}
 FaceGenerator.__index = FaceGenerator

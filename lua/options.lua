@@ -1,5 +1,5 @@
-require("lua/menu/videoOptions")
-require("lua/menu/soundOptions")
+require("lua/view/menu/videoOptions")
+require("lua/view/menu/soundOptions")
 
 Options = {}
 Options.__index = Options

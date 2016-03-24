@@ -1,4 +1,4 @@
-require("lua/menu/credits")
+require("lua/view/menu/credits")
 
 MainMenu = {}
 MainMenu.__index = MainMenu

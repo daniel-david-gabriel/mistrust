@@ -1,15 +1,17 @@
-require("lua/game/tab")
+require("lua/save")
+
 require("lua/game/town")
 require("lua/game/player")
 require("lua/game/actions/action")
 require("lua/game/actions/result")
-require("lua/menu/uiElement")
-require("lua/game/phase/preparationPhase")
-require("lua/game/phase/actPhase")
-require("lua/game/phase/resultsPhase")
-require("lua/game/phase/gameOver")
-require("lua/game/phase/huntSummary")
-require("lua/save")
+
+require("lua/view/tab")
+require("lua/view/menu/uiElement")
+require("lua/view/phase/preparationPhase")
+require("lua/view/phase/actPhase")
+require("lua/view/phase/resultsPhase")
+require("lua/view/phase/gameOver")
+require("lua/view/phase/huntSummary")
 
 Game = {}
 Game.__index = Game
@@ -80,4 +82,3 @@ end
 function Game.loadMaps(self)
 	
 end
-
