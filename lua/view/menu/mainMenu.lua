@@ -1,4 +1,5 @@
 require("lua/view/menu/credits")
+require("lua/view/phase/newGame")
 
 MainMenu = {}
 MainMenu.__index = MainMenu
@@ -106,8 +107,7 @@ function MainMenu.processControls(self, input)
 		end
 	elseif controls:isMenu(input) or controls:isConfirm(input) then
 		if self.selection == 1 then
-			game:new()
-			toState = game
+			toState = NewGame()
 			soundEffects:playSoundEffect(self.sfx)
 		elseif self.selection == 2 then
 			game:load(Save("save.dat"))
